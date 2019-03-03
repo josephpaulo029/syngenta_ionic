@@ -1,0 +1,32 @@
+<ion-content padding style="height: 90%;">
+    <ion-card style="height: 58%; width: 100%; background: #ddd; margin: 0 auto;">
+        <zxing-scanner #scanner [device]="currentDevice" (scanSuccess)="handleQrCodeResult($event)"
+            [formats]="['EAN_13', 'CODE_128', 'QR_CODE']" [tryHarder]="true"></zxing-scanner>
+    </ion-card>
+    <ion-grid>
+        <ion-row style="text-align: center; margin: 0 auto;">
+            <ion-label style="margin: 0 auto; font-size: .8rem;">Scan Membership Card</ion-label>
+        </ion-row>
+        <br>
+        <form #cardno="ngForm">
+            <ion-row style="text-align: center; margin: 0 auto;">
+                <ion-input placeholder="" readonly="false" name="qrResultString" [(ngModel)]="qrResultString"
+                    style="border: solid #000; border-width: 2px;"> </ion-input>
+            </ion-row>
+        </form>
+        <ion-row style="text-align: center; margin: 0 auto;">
+            <ion-label style="margin: 0 auto; font-size: .8rem;">Membership ID</ion-label>
+        </ion-row>
+        <br>
+    </ion-grid>
+    <ion-button expand="block" style="--background: #45484d; --background-activated: #45484d; height: 3rem;"
+        (click)="scanCard(cardno)">SCAN CARD</ion-button>
+</ion-content>
+
+<ion-footer>
+    <ion-toolbar>
+        <ion-title>
+            <img src="assets/img/SYNGENTA WHITE.png">
+        </ion-title>
+    </ion-toolbar>
+</ion-footer>

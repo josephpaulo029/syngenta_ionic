@@ -1,0 +1,16 @@
+:host {
+    ion-row {
+        align-items: center;
+        ion-col {
+            margin-top: 10px;
+            text-align: center;
+            ion-icon {
+                color: #fff;
+                font-size: 5rem;
+            }
+            ion-label {
+                color: #fff;
+            }
+        }
+    }
+}

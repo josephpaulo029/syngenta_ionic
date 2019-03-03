@@ -1,5 +1,7 @@
 {
   "name": "fieldforce",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

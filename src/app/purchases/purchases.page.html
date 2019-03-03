@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Claim - {{title || 'Retailer'}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row class="navTabs">
+    <ion-col style="background: #45484d;" (click)="updateTitle('Retailer')">
+      <ion-label>Retailer</ion-label>
+    </ion-col>
+    <ion-col style="background: #e6893c;" (click)="updateTitle('Growers')">
+      <ion-label>Growers</ion-label>
+    </ion-col>
+  </ion-row>
+  <app-qrscanner [menu]="'purchases'"></app-qrscanner>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>
+      <img src="assets/img/SYNGENTA WHITE.png">
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>

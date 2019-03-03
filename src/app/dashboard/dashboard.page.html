@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Dashboard
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card [routerLink]="[ '/inbox']" style="border-color: #d7d2cf;">
+    <ion-row justify-content-center align-items-center
+      style="height: 100%; background: url('../../assets/img/bg_home_a.png');">
+      <ion-label><span>Inbox</span></ion-label>
+    </ion-row>
+  </ion-card>
+  <ion-card [routerLink]="[ '/forms']" style="border-color: #f4b041;">
+    <ion-row justify-content-center align-items-center
+      style="height: 100%; background: url('../../assets/img/bg_home_b.png');">
+      <ion-label><span>Forms</span></ion-label>
+    </ion-row>
+  </ion-card>
+  <ion-card [routerLink]="[ '/purchases']" style="border-color: #84cbe1;">
+    <ion-row justify-content-center align-items-center
+      style="height: 100%; background: url('../../assets/img/bg_home_c.png');">
+      <ion-label><span>Purchases</span></ion-label>
+    </ion-row>
+  </ion-card>
+  <ion-card [routerLink]="[ '/reports']" style="border-color: #b0c7bf;">
+    <ion-row justify-content-center align-items-center
+      style="height: 100%; background: url('../../assets/img/bg_home_d.png');">
+      <ion-label><span>Reports</span></ion-label>
+    </ion-row>
+  </ion-card>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>
+      <img src="assets/img/SYNGENTA WHITE.png">
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>

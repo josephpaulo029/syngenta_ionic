@@ -1,0 +1,66 @@
+:host {
+    ion-content {
+        // background-image: url('../../assets/img/loginBG.jpg');
+        --background: #fff;
+        background-repeat: no-repeat;
+        background-size:cover;
+        padding: 10% 10%;
+        ion-item {
+            ion-icon {
+                padding-right: 5%;
+                color: #757575;
+            }
+            ion-input {
+
+            }
+        }
+
+        .spacing {
+            height: 10%;
+        }
+
+        .headerImg {
+            height: 150px;
+            background-repeat: no-repeat;
+            background-size:cover;
+            background-image: url('../../assets/img/bg_ricefields_b.png');
+            --background: transparent;
+        }
+
+        .loginItems {
+            ion-row {
+                ion-button {
+                    margin: 0 auto;
+                    width: 50%;
+                    --background: #2e634f;
+                    --background-activated: #2e634f;
+                }
+            }
+        }
+
+        ion-img {
+            width: 200px;
+            height: auto;
+        }
+    }
+
+    ion-footer {
+        ion-toolbar {
+            height: 50px;
+            --background: #2e634f;
+            border: solid #b0c6bf;
+            border-width: 10px 0px 0px 0px;
+            ion-title {
+                text-align: right;
+                padding: 0px 0px 0px 0px;
+                background: #2e634f;
+                img {
+                    width: 23%;
+                    margin-bottom: 4%;
+                    height: auto;
+                }
+            }
+        }
+    }
+
+}

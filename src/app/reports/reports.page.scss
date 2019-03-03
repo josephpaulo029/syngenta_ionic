@@ -1,0 +1,52 @@
+:host {
+    ion-header {
+        ion-toolbar {
+            --background: #2d644d;
+            ion-title {
+                background: #2d644d;
+                color: #fff;
+            }
+            ion-buttons {
+                ion-back-button {
+                    color: #fff;
+                }
+                ion-menu-button {
+                    color: #fff;
+                }
+
+            }
+        }
+    }
+    ion-content {
+        .navTabs {
+            ion-col {
+                color: #fff; 
+                text-align: center;
+                padding: 5%;
+
+                ion-label {
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
+
+    ion-footer {
+        ion-toolbar {
+            height: 50px;
+            --background: #2e634f;
+            border: solid #b0c6bf;
+            border-width: 10px 0px 0px 0px;
+            ion-title {
+                text-align: right;
+                padding: 0px 0px 0px 0px;
+                background: #2e634f;
+                img {
+                    width: 23%;
+                    margin-bottom: 4%;
+                    height: auto;
+                }
+            }
+        }
+    }
+}

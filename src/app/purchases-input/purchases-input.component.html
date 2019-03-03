@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{fforce.getTitle}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding *ngIf="fforce.getTitle == 'Retailer'">
+</ion-content>
+
+<ion-content padding *ngIf="fforce.getTitle == 'Growers'">
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>
+      <img src="assets/img/SYNGENTA WHITE.png">
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>

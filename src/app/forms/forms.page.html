@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{title || 'Retailer'}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row class="navTabs">
+    <ion-col style="background: #45484d;" (click)="updateTitle('Retailer')">
+      <ion-label>Retailer</ion-label>
+    </ion-col>
+    <ion-col style="background: #e6893c;" (click)="updateTitle('Growers')">
+      <ion-label>Growers</ion-label>
+    </ion-col>
+    <ion-col style="background: #47a7bf;" (click)="updateTitle('Re-Register')">
+      <ion-label>Re-Register</ion-label>
+    </ion-col>
+  </ion-row>
+  <app-qrscanner [hidden]="title == 'Re-Register'" [menu]="'forms'"></app-qrscanner>
+
+  <ion-row justify-content-center align-items-center [hidden]="title != 'Re-Register'" style="height: 100%;">
+    <ion-col style="bottom: 5%; padding: 5%;">
+          <ion-button expand="block" size="large" style="--background: #2e634f; width: 100%; height: 5rem; margin: 0 auto; margin-bottom: 20px;">CHANGE MOBILE NUMBER</ion-button>
+          <ion-button expand="block" size="large" style="--background: #e8883c; width: 100%; height: 5rem; margin: 0 auto;">LOST MEMBERSHIP CARD</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>
+      <img src="assets/img/SYNGENTA WHITE.png">
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>

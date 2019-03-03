@@ -1,0 +1,46 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content>
+  <ion-row class="headerImg">
+    <!-- <ion-img [src]="logo"></ion-img> -->
+  </ion-row>
+  <ion-grid>
+    <ion-row class="spacing"></ion-row>
+    <br><br><br>
+    <ion-row>
+      <ion-col>
+      </ion-col>
+      <ion-col class="loginItems" size="10">
+        <form #loginDetails="ngForm">
+          <ion-item>
+            <ion-icon name="contact"></ion-icon>
+            <ion-input placeholder="Username" value="jim2019" name="username" ngModel></ion-input>
+          </ion-item>
+          <br>
+          <ion-item>
+            <ion-icon name="unlock"></ion-icon>
+            <ion-input placeholder="Password" value="icanseeyou" type="password" name="password" ngModel></ion-input>
+          </ion-item>
+        </form>
+        <br>
+        <ion-row>
+          <ion-button shape="round" (click)="login(loginDetails)">LOG IN</ion-button>
+        </ion-row>
+      </ion-col>
+      <ion-col>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>
+      <img src="assets/img/SYNGENTA WHITE.png">
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>

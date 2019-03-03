@@ -1,0 +1,37 @@
+:host {
+    ion-content {
+        --background: transparent !important;
+        ion-label {
+            text-align: center;
+        }
+    }
+
+    .transparentBody {
+        background: transparent!important;
+    }
+
+    ion-footer {
+        ion-toolbar {
+            height: 50px;
+            --background: #2e634f;
+            border: solid #b0c6bf;
+            border-width: 10px 0px 0px 0px;
+            ion-title {
+                text-align: right;
+                padding: 0px 0px 0px 0px;
+                background: #2e634f;
+                img {
+                    width: 23%;
+                    margin-bottom: 4%;
+                    height: auto;
+                }
+            }
+        }
+    }
+}
+
+app-qrscanner {
+    ion-content {
+        background: transparent !important;
+     }
+}

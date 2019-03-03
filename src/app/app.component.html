@@ -1,16 +1,31 @@
 <ion-app>
   <ion-split-pane>
     <ion-menu>
-      <ion-header>
+      <!-- <ion-header>
         <ion-toolbar>
           <ion-title>Menu</ion-title>
         </ion-toolbar>
-      </ion-header>
+      </ion-header> -->
       <ion-content>
+        <ion-grid>
+          <ion-row class="headerStyle">
+            <ion-col size="4">
+              <ion-avatar>
+                <img [src]="userDetails.userImg">
+              </ion-avatar>
+            </ion-col>
+            <ion-col style="margin-left: 5%; margin-top: 3%;">
+              <ion-label>{{userDetails.name}}</ion-label><br>
+              <ion-label class="subLabel">Member ID: {{userDetails.memberID}}</ion-label><br>
+              <ion-label class="subLabel">{{userDetails.date}}</ion-label><br>
+              <ion-label class="subLabel">{{userDetails.time}}</ion-label>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
         <ion-list>
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
-            <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
-              <ion-icon slot="start" [name]="p.icon"></ion-icon>
+            <ion-item [routerLink]="[p.url]">
+              <!-- <ion-icon slot="start" [name]="p.icon"></ion-icon> -->
               <ion-label>
                 {{p.title}}
               </ion-label>

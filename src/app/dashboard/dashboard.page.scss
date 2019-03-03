@@ -1,0 +1,68 @@
+:host {
+    ion-header {
+        ion-toolbar {
+            --background: #2d644d;
+            ion-title {
+                background: #2d644d;
+                color: #fff;
+            }
+            ion-buttons {
+                ion-menu-button {
+                    color: #fff;
+                }
+            }
+        }
+    }
+    ion-content {
+        ion-card {
+            height: 25%;
+            margin: 0px 0px 0px 0px;
+            border-radius: 0px;
+            border: solid;
+            border-width: 0px 0px 10px 0px;
+            text-align: center;
+            // background: url("../../assets/img/loginBG.jpg");
+            // filter: saturate(3);
+            ion-row {
+                background-position: center !important;
+                background-size: cover !important;
+                background-repeat: no-repeat !important;
+            }
+            ion-label {
+                span {
+                    font-size: 2rem;
+                    color: #fff;
+                }
+            }
+        }
+    }
+
+    ion-footer {
+        ion-toolbar {
+            height: 40px;
+            --background: #2e634f;
+            border: solid #b0c6bf;
+            border-width: 0px 0px 0px 0px;
+            ion-title {
+                text-align: right;
+                padding: 0px 0px 0px 0px;
+                background: #2e634f;
+                img {
+                    width: 23%;
+                    margin-bottom: 4%;
+                    height: auto;
+                }
+            }
+        }
+    }
+}
+
+.saturate { filter: saturate(3); }
+.grayscale { filter: grayscale(100%); }
+.contrast { filter: contrast(160%); }
+.brightness { filter: brightness(0.25); }
+.blur { filter: blur(3px); }
+.invert { filter: invert(100%); }
+.sepia { filter: sepia(100%); }
+.huerotate { filter: hue-rotate(180deg); }
+.rss.opacity { filter: opacity(50%); }
