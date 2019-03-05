@@ -13,7 +13,7 @@ import {
 import { HTTP } from '@ionic-native/http/ngx';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Platform } from '@ionic/angular';
+import { Platform, LoadingController } from '@ionic/angular';
 // import * as aws from "aws-sdk/";
 // import * as S3 from 'aws-sdk/clients/s3';
 
@@ -30,12 +30,6 @@ export class FieldforceService {
   link: any;
   link2: any;
   token: any = '166d35eabca17c1089e4662042cf3bb103a28d8d';
-  headers = new HttpHeaders()
-    .set("Content-Type", "application/json")
-    .set("Access-Control-Allow-Origin", "*")
-    .set('Access-Control-Allow-Methods', 'GET, POST')
-    .set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-
   headersToken = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Token ' + this.token });
 
   set getTitle(value: any) {
@@ -53,21 +47,45 @@ export class FieldforceService {
   get getMemberID(): any {
     return this._memberid;
   }
+
+  _selectedProvince: any;
+  set selectedProvince(value: any) {
+    this._selectedProvince = value;
+  }
+
+  get selectedProvince(): any {
+    return this._selectedProvince;
+  }
+
+  _selectedCity: any;
+  set selectedCity(value: any) {
+    this._selectedCity = value;
+  }
+
+  get selectedCity(): any {
+    return this._selectedCity;
+  }
+
+
+
+
   locationList: any;
   provinceList: any = [];
   cityList: any = [];
-
+  loading: any;
   constructor(
     public plt: Platform,
     private geolocation: Geolocation,
     private http: HTTP,
     private httpclient: HttpClient,
+    public loadingCtrl: LoadingController
+
   ) {
     this.link2 = "http://54.169.232.8:8004";
     this.link = "https://128.199.228.223:3000"
     // this.link = "http://localhost:3000/"
 
-
+    this.loadLocations();
   }
 
   // uploadfile(file) {
@@ -105,25 +123,21 @@ export class FieldforceService {
 
   //   });
   // }
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      message: '',
+    });
+    await this.loading.present();
+  }
 
-
-  loadLocations() {
-
+  async loadLocations() {
     if (this.plt.is('mobileweb')) {
       return new Promise(resolve => {
         this.httpclient.get(this.link + '/region', {}).subscribe((response) => {
-          console.log(response);
-          for (var province in response) {
-            this.provinceList.push(province);
-            let cities = response[province]
-            cities.forEach(city => {
-              this.cityList.push(city);
-            });
-          }
-          let locations: any = {};
-          locations.provinceList = this.provinceList;
-          locations.cityList = this.cityList;
-          // alert(JSON.stringify(locations));
+          // console.log(response);
+          let locations: any;
+          locations = response;
+          // console.log(locations);
           resolve(locations);
         });
       });
@@ -131,18 +145,10 @@ export class FieldforceService {
 
       return new Promise(resolve => {
         this.http.get(this.link2 + '/static/locations.json', {}, {}).then((response) => {
-          console.log(response);
-          for (var province in JSON.parse(response.data)) {
-            this.provinceList.push(province);
-            let cities = JSON.parse(response.data)[province]
-            cities.forEach(city => {
-              this.cityList.push(city);
-            });
-          }
-          let locations: any = {};
-          locations.provinceList = this.provinceList;
-          locations.cityList = this.cityList;
-          // alert(JSON.stringify(locations));
+          // console.log(response);
+          let locations: any;
+          locations = response;
+          // console.log(locations);
           resolve(locations);
         });
 
@@ -164,13 +170,15 @@ export class FieldforceService {
 
     if (this.plt.is('mobileweb')) {
       return new Promise(resolve => {
-        this.httpclient.post(this.link + '/auth/token/login/', data).subscribe((response) => {
+        this.httpclient.post(this.link2 + '/auth/token/login/', data).subscribe((response) => {
           // console.log(response);
           let res;
           res = response;
           if (res.auth_token) {
             this.token = res.auth_token;
             localStorage.setItem('token', res.auth_token);
+            this.getProducts();
+
             resolve(true);
           } else {
             resolve(false);
@@ -194,7 +202,7 @@ export class FieldforceService {
           }
         }).catch(error => {
           // alert(JSON.stringify(error))
-          console.log(error.status);
+          console.log(error);
           console.log(error.error); // error message as string
           console.log(error.headers);
 
@@ -208,7 +216,7 @@ export class FieldforceService {
     if (this.plt.is('mobileweb')) {
       return new Promise(resolve => {
         this.httpclient.get(this.link + '/get/message/fieldforce/').subscribe((response) => {
-          console.log(response);
+          // console.log(response);
           // alert(response);
 
           resolve(response)
@@ -232,7 +240,40 @@ export class FieldforceService {
     }
   }
 
+  getProducts() {
+    let user = {
+      "username": "jim2019",
+      "password": "icanseeyou"
+    }
+    let wew = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Token ' + this.token });
+    console.log(wew)
+    if (this.plt.is('mobileweb')) {
+      return new Promise(resolve => {
+        this.http.get(this.link2 + '/rewards/products/', { user }, { wew }).then((response) => {
+          // console.log(response);
+          alert(JSON.stringify(response));
 
+          resolve(response)
+        });
+      });
+    } else {
+      return new Promise(resolve => {
+        this.http.get(this.link2 + '/rewards/products/', { parameters: user }, { headers: wew }).then((response) => {
+          // console.log(response);
+          alert(JSON.stringify(response));
+
+          resolve(response)
+        }).catch(error => {
+          // alert(JSON.stringify(error))
+          console.log(error.status);
+          console.log(error.error); // error message as string
+          console.log(error.headers);
+
+        });
+
+      });
+    }
+  }
 
   ngOnDestroy() {
     localStorage.removeItem('token');

@@ -1,0 +1,20 @@
+:host {
+    ion-header {
+        ion-toolbar {
+            --background: #2d644d;
+            ion-title {
+                background: #2d644d;
+                color: #fff;
+            }
+            ion-buttons {
+                ion-back-button {
+                    color: #fff;
+                }
+                ion-menu-button {
+                    color: #fff;
+                }
+
+            }
+        }
+    }
+}

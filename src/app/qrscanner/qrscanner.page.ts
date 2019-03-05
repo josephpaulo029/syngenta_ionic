@@ -67,19 +67,21 @@ export class QrscannerPage implements OnInit {
   }
 
   scanCard(cardno: NgForm) {
-    if (cardno.value.qrResultString != undefined) {
+    if (cardno.value.qrResultString != undefined && cardno.value.qrResultString != '') {
       switch (this.menu) {
         case 'forms':
+          this.fforce.getMemberID = this.qrResultString;
           this.router.navigate(['/forminput']);
           break;
         case 'purchases':
+          this.fforce.getMemberID = this.qrResultString;
           this.router.navigate(['/purchasesinput']);
           break;
 
         default:
           break;
       }
-    }else{
+    } else {
       this.errorMsg('Please scan or enter your card number.')
     }
   }
@@ -96,7 +98,6 @@ export class QrscannerPage implements OnInit {
   handleQrCodeResult(resultString: string) {
     console.debug('Result: ', resultString);
     this.qrResultString = resultString;
-    this.fforce.getMemberID = this.qrResultString;
   }
 
   onDeviceSelectChange(selectedValue: string) {

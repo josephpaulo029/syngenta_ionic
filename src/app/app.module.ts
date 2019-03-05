@@ -7,7 +7,6 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardPage } from './dashboard/dashboard.page';
@@ -24,7 +23,7 @@ import { FormInputComponent } from './form-input/form-input.component';
 import { PurchasesInputComponent } from './purchases-input/purchases-input.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PopoverComponent } from './popover/popover.component';
-// import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
+import { ModalSelectComponent } from './modal-select/modal-select.component';
 
 @NgModule({
   declarations: [
@@ -41,9 +40,11 @@ import { PopoverComponent } from './popover/popover.component';
     FormInputComponent,
     PurchasesInputComponent,
     PopoverComponent,
+    ModalSelectComponent
   ],
   entryComponents: [
     PopoverComponent,
+    ModalSelectComponent
   ],
   imports: [
     BrowserModule,

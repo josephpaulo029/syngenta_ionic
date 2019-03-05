@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavController, IonSelect } from '@ionic/angular';
-import { FieldforceService } from '../api/fieldforce.service';
+import { NavController, IonSelect, LoadingController } from '@ionic/angular';
 import { formatDate } from '@angular/common';
 import { NgForm } from '@angular/forms';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
@@ -9,6 +8,8 @@ import { MediaCapture, MediaFile, CaptureError, CaptureImageOptions } from '@ion
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { ModalController } from '@ionic/angular';
 import { PopoverComponent } from './../popover/popover.component';
+import { FieldforceService } from '../api/fieldforce.service';
+import { ModalSelectComponent } from '../modal-select/modal-select.component';
 
 @Component({
   selector: 'app-form-input',
@@ -51,7 +52,7 @@ export class FormInputComponent implements OnInit {
   birthdate: any;
   numberofAttach: any = 0;
   attachments: any = [];
-
+  loading: any;
 
   constructor(
     public fforce: FieldforceService,
@@ -59,28 +60,42 @@ export class FormInputComponent implements OnInit {
     private datePicker: DatePicker,
     private mediaCapture: MediaCapture,
     private imagePicker: ImagePicker,
-    public modalController: ModalController
+    public modalController: ModalController,
+    public loadingCtrl: LoadingController,
+
   ) { }
 
   ngOnInit() {
     Promise.resolve(this.fforce.loadLocations()).then(data => {
-      // console.log(data);
-      this.locationList = data;
-      this.provinceList = this.locationList.provinceList;
-      this.cityList = this.locationList.cityList;
-      // alert(JSON.stringify(this.cityList))
+      for (var province in data) {
+        this.provinceList.push(province);
+      }
       this.selectedProvince = this.provinceList[0];
+      data[this.selectedProvince].forEach(city => {
+        this.cityList.push(city);
+      });
       this.selectedCity = this.cityList[0];
-      this.selectedGender = this.genderList[0];
-      this.selectedCrop = this.cropList[0].name;
+    }).catch(e => {
+      console.log(e);
+    });
+    this.selectedGender = this.genderList[0];
+    this.selectedCrop = this.cropList[0].name;
 
-      // alert(JSON.stringify(data));
+  }
+
+  changeProvince(selectedProv) {
+    this.cityList = [];
+    Promise.resolve(this.fforce.loadLocations()).then(data => {
+      data[selectedProv].forEach(city => {
+        this.cityList.push(city);
+      });
+      this.selectedCity = this.cityList[0];
     }).catch(e => {
       console.log(e);
     });
   }
 
-  async presentModal() {
+  async imgModal() {
     const myModal = await this.modalController.create({
       component: PopoverComponent,
       cssClass: 'my-custom-modal-css'
@@ -88,11 +103,87 @@ export class FormInputComponent implements OnInit {
     myModal.present();
 
     const { data } = await myModal.onWillDismiss();
-    this.attachments = [];
-    this.attachments.push(data);
-    alert(JSON.stringify(this.attachments));
+    if (data != null) {
+      this.attachments = [];
+      this.attachments.push(data);
+      // alert(JSON.stringify(this.attachments));
+    }
     this.numberofAttach = this.attachments.length;
+
     // alert(JSON.stringify(this.numberofAttach));
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      message: '',
+    });
+    this.loading.present();
+    this.loading.dismiss();
+
+  }
+
+  async selectModal(selection) {
+    this.presentLoading();
+    let listProvince;
+    let listCities;
+    let modalTitle;
+    let selectionData;
+    listProvince = this.fforce.provinceList;
+    listCities = this.fforce.cityList;
+    switch (selection) {
+      case 'province':
+        selectionData = listProvince;
+        modalTitle = 'Province List';
+        break;
+      case 'city':
+        selectionData = listCities;
+        modalTitle = 'City List';
+        break;
+
+      default:
+        break;
+    }
+    const modalselect = await this.modalController.create({
+      component: ModalSelectComponent,
+      componentProps: { value: selectionData, modal_title: modalTitle, type: selection },
+      cssClass: ''
+    });
+    modalselect.present();
+
+    await modalselect.onWillDismiss().then(data => {
+      let selected;
+      selected = data;
+      console.log(data);
+      if (selected.data != undefined) {
+        switch (selection) {
+          case 'province':
+            this.fforce.selectedProvince = selected.data.selectedData
+            this.selectedProvince = this.fforce.selectedProvince
+            break;
+          case 'city':
+            this.fforce.selectedCity = selected.data.selectedData
+            this.selectedCity = this.fforce.selectedCity
+            modalTitle = 'City List';
+            break;
+
+          default:
+            break;
+        }
+      } else {
+        switch (selection) {
+          case 'province':
+            this.selectedProvince = selected.data.selectedData
+            break;
+          case 'city':
+            this.selectedCity = selected.data.selectedData
+            break;
+
+          default:
+            break;
+        }
+      }
+    });
+
   }
 
   openSelect(select) {
