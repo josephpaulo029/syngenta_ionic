@@ -24,6 +24,7 @@ import { PurchasesInputComponent } from './purchases-input/purchases-input.compo
 import { HttpClientModule } from '@angular/common/http';
 import { PopoverComponent } from './popover/popover.component';
 import { ModalSelectComponent } from './modal-select/modal-select.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 @NgModule({
   declarations: [
@@ -40,11 +41,13 @@ import { ModalSelectComponent } from './modal-select/modal-select.component';
     FormInputComponent,
     PurchasesInputComponent,
     PopoverComponent,
-    ModalSelectComponent
+    ModalSelectComponent,
+    CheckoutComponent,
   ],
   entryComponents: [
     PopoverComponent,
-    ModalSelectComponent
+    ModalSelectComponent,
+    CheckoutComponent,
   ],
   imports: [
     BrowserModule,

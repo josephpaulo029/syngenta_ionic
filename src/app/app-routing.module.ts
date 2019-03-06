@@ -12,6 +12,7 @@ import { QrscannerPage } from './qrscanner/qrscanner.page';
 import { FormInputComponent } from './form-input/form-input.component';
 import { PurchasesInputComponent } from './purchases-input/purchases-input.component';
 import { PopoverComponent } from './popover/popover.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 const routes: Routes = [
   {
@@ -66,6 +67,10 @@ const routes: Routes = [
   {
     path: 'popover',
     component: PopoverComponent
+  },
+  {
+    path: 'checkout',
+    component: CheckoutComponent
   },
 ];
 

@@ -1,3 +1,80 @@
-<p>
-  checkout works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Purchase - {{fforce.getTitle}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <form #checkoutDetails="ngForm">
+    <ion-row>
+      <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="dateToday"
+        [(ngModel)]="dateToday">
+      </ion-input>
+    </ion-row>
+    <ion-row>
+      <ion-label>Date</ion-label>
+    </ion-row>
+
+    <ion-row style="text-align: center;">
+      <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="membershipid"
+        [(ngModel)]="fforce.getMemberID"></ion-input>
+    </ion-row>
+    <ion-row>
+      <ion-label>Membership ID</ion-label>
+    </ion-row>
+
+    <ion-row>
+      <ion-input placeholder="" readonly="true" name="membership_status" ngModel></ion-input>
+    </ion-row>
+    <ion-row>
+      <ion-label>Membership Status</ion-label>
+    </ion-row>
+
+    <ion-row>
+      <ion-col (click)="imgModal($event)" style="background: #000; color: #fff;">
+        <ion-label style="line-height: 25px;">PHOTO RECEIPT</ion-label>
+      </ion-col>
+      <ion-col size=".5" style="border: none;">
+
+      </ion-col>
+      <ion-col>
+        <ion-label style="line-height: 25px;">{{numberofAttach}} ATTACHED</ion-label>
+      </ion-col>
+      <!-- <ion-input placeholder="" name="email" ngModel></ion-input> -->
+    </ion-row>
+  </form>
+</ion-content>
+
+<ion-content>
+  <ion-row style="background: #000; color: #fff;">
+    <ion-col style="text-align: center; padding: 0px;">
+      <ion-label style="font-size: .9rem;">Purchased Summary</ion-label>
+    </ion-col>
+  </ion-row>
+
+  <ion-row style="background: #000; color: #fff;">
+    <ion-col style="text-align: left;">
+      <ion-label style="font-size: .9rem;">TOTAL POINTS TO BE AWARDED</ion-label>
+    </ion-col>
+    <ion-col size="3" style="text-align: right;">
+      <ion-label style="font-size: .9rem;">POINTS</ion-label>
+    </ion-col>
+  </ion-row>
+
+  <ion-row style="background: #ff0000; color: #fff;">
+    <ion-col style="text-align: center; padding: 0px; border-color: #ff0000;">
+      <ion-label style="font-size: .9rem; line-height: 3;">END TRANSACTION</ion-label>
+    </ion-col>
+  </ion-row>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>
+      <img src="assets/img/SYNGENTA WHITE.png">
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>

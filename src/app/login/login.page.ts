@@ -28,7 +28,7 @@ export class LoginPage implements OnInit {
     if (validate.username != "" && validate.password != "") {
       return true
     } else {
-      return true
+      return false
     }
   }
 

@@ -159,14 +159,14 @@ export class FieldforceService {
   login(info) {
     console.log(info);
     let data: any = {};
-    // data = {
-    //   username: info.username,
-    //   password: info.password,
-    // }
     data = {
-      username: "jim2019",
-      password: "icanseeyou",
+      username: info.username,
+      password: info.password,
     }
+    // data = {
+    //   username: "jim2019",
+    //   password: "icanseeyou",
+    // }
 
     if (this.plt.is('mobileweb')) {
       return new Promise(resolve => {
@@ -177,7 +177,7 @@ export class FieldforceService {
           if (res.auth_token) {
             this.token = res.auth_token;
             localStorage.setItem('token', res.auth_token);
-            this.getProducts();
+            // this.getProducts();
 
             resolve(true);
           } else {

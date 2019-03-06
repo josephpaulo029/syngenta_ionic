@@ -5,6 +5,7 @@ import { NgForm } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { FieldforceService } from '../api/fieldforce.service';
 import { ModalSelectComponent } from '../modal-select/modal-select.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-purchases-input',
@@ -21,9 +22,10 @@ export class PurchasesInputComponent implements OnInit {
 
   constructor(
     public fforce: FieldforceService,
+    private router: Router,
   ) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.selectedProduct = "Select Product";
   }
 
@@ -40,6 +42,14 @@ export class PurchasesInputComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  checkOut() {
+    this.router.navigate(['/checkout']);
+  }
+
+  addItem() {
+
   }
 
 }

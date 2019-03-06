@@ -10,7 +10,8 @@
 <ion-content padding *ngIf="fforce.getTitle == 'Retailer'" style="--padding-top: 5px; --padding-bottom: 0px;">
   <form #details="ngForm">
     <ion-row>
-      <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="dateToday" [(ngModel)]="dateToday">
+      <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="dateToday"
+        [(ngModel)]="dateToday">
       </ion-input>
     </ion-row>
     <ion-row>
@@ -18,7 +19,8 @@
     </ion-row>
 
     <ion-row style="text-align: center;">
-      <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="membershipid" [(ngModel)]="fforce.getMemberID"></ion-input>
+      <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="membershipid"
+        [(ngModel)]="fforce.getMemberID"></ion-input>
     </ion-row>
     <ion-row>
       <ion-label>Membership ID</ion-label>
@@ -31,7 +33,8 @@
       <ion-label>Membership Status</ion-label>
     </ion-row>
 
-    <ion-item style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
+    <ion-item
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
       <ion-input placeholder="" readonly="true" name="retailer" [(ngModel)]="retailer"> </ion-input>
       <ion-icon name="arrow-dropdown"></ion-icon>
     </ion-item>
@@ -39,14 +42,16 @@
       <ion-label>Retailer</ion-label>
     </ion-row>
 
-    <ion-item (click)="openSelect('product')" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
+    <ion-item (click)="openSelect('product')"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
       <ion-input placeholder="" readonly="true" name="product" [(ngModel)]="selectedProduct"> </ion-input>
       <ion-icon name="arrow-dropdown"></ion-icon>
     </ion-item>
     <ion-row>
       <ion-label>Item Name</ion-label>
     </ion-row>
-    <ion-item hidden="true" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
+    <ion-item hidden="true"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
       <ion-label>Item Name</ion-label>
       <ion-select placeholder="" #itemSelect name="product" [(ngModel)]="selectedProduct">
         <ion-select-option value="-1" disabled="true">Select Product</ion-select-option>
@@ -92,7 +97,7 @@
   </form>
 
   <ion-row>
-    <ion-col style="border: none; padding: 0px;">
+    <ion-col style="border: none; padding: 0px;" (click)="addItem()">
       <ion-row>
         <ion-input placeholder="" readonly="true" value="ADD ITEM" style="background: #000; color: #fff;"></ion-input>
       </ion-row>
@@ -101,7 +106,8 @@
     </ion-col>
     <ion-col style="border: none; padding: 0px;">
       <ion-row>
-        <ion-input placeholder="" readonly="true" value="CHECKOUT" style="border-color: #ff0000; background: #ff0000; color: #fff;"></ion-input>
+        <ion-input (click)="checkOut()" placeholder="" readonly="true" value="CHECKOUT"
+          style="border-color: #ff0000; background: #ff0000; color: #fff;"></ion-input>
       </ion-row>
     </ion-col>
   </ion-row>
@@ -111,7 +117,8 @@
 <ion-content padding *ngIf="fforce.getTitle == 'Growers'">
   <form #details="ngForm">
     <ion-row>
-      <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="dateToday" [(ngModel)]="dateToday">
+      <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="dateToday"
+        [(ngModel)]="dateToday">
       </ion-input>
     </ion-row>
     <ion-row>
@@ -119,7 +126,8 @@
     </ion-row>
 
     <ion-row style="text-align: center;">
-      <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="membershipid" [(ngModel)]="fforce.getMemberID"></ion-input>
+      <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="membershipid"
+        [(ngModel)]="fforce.getMemberID"></ion-input>
     </ion-row>
     <ion-row>
       <ion-label>Membership ID</ion-label>
@@ -132,14 +140,16 @@
       <ion-label>Membership Status</ion-label>
     </ion-row>
 
-    <ion-item (click)="openSelect('retailer')" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
+    <ion-item (click)="openSelect('retailer')"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
       <ion-input placeholder="" readonly="true" name="retailer" [(ngModel)]="selectedRetailer"> </ion-input>
       <ion-icon name="arrow-dropdown"></ion-icon>
     </ion-item>
     <ion-row>
       <ion-label>Retailer</ion-label>
     </ion-row>
-    <ion-item hidden="true" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
+    <ion-item hidden="true"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
       <ion-label>Retailer</ion-label>
       <ion-select placeholder="" #itemRetailer name="retailer" [(ngModel)]="selectedRetailer">
         <ion-select-option value="-1" disabled="true">Select Product</ion-select-option>
@@ -147,14 +157,16 @@
       </ion-select>
     </ion-item>
 
-    <ion-item (click)="openSelect('product')" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
+    <ion-item (click)="openSelect('product')"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
       <ion-input placeholder="" readonly="true" name="product" [(ngModel)]="selectedProduct"> </ion-input>
       <ion-icon name="arrow-dropdown"></ion-icon>
     </ion-item>
     <ion-row>
       <ion-label>Item Name</ion-label>
     </ion-row>
-    <ion-item hidden="true" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
+    <ion-item hidden="true"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
       <ion-label>Item Name</ion-label>
       <ion-select placeholder="" #itemSelect name="product" [(ngModel)]="selectedProduct">
         <ion-select-option value="-1" disabled="true">Select Product</ion-select-option>
@@ -200,16 +212,17 @@
   </form>
 
   <ion-row>
-    <ion-col style="border: none; padding: 0px;">
+    <ion-col style="border: none; padding: 0px;" (click)="addItem()">
       <ion-row>
         <ion-input placeholder="" readonly="true" value="ADD ITEM" style="background: #000; color: #fff;"></ion-input>
       </ion-row>
     </ion-col>
     <ion-col size=".1" style="border: none;">
     </ion-col>
-    <ion-col style="border: none; padding: 0px;">
+    <ion-col style="border: none; padding: 0px;" (click)="checkOut()">
       <ion-row>
-        <ion-input placeholder="" readonly="true" value="CHECKOUT" style="border-color: #ff0000; background: #ff0000; color: #fff;"></ion-input>
+        <ion-input placeholder="" readonly="true" value="CHECKOUT"
+          style="border-color: #ff0000; background: #ff0000; color: #fff;"></ion-input>
       </ion-row>
     </ion-col>
   </ion-row>
