@@ -14,6 +14,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Platform, LoadingController } from '@ionic/angular';
+import { tokenKey } from '@angular/core/src/view';
 // import * as aws from "aws-sdk/";
 // import * as S3 from 'aws-sdk/clients/s3';
 
@@ -86,6 +87,62 @@ export class FieldforceService {
     // this.link = "http://localhost:3000/"
 
     this.loadLocations();
+    this.sample();
+  }
+
+  sample() {
+    let reqHeader: HttpHeaders = new HttpHeaders();
+    reqHeader = reqHeader.append("Content-Type", "application/json");
+    reqHeader = reqHeader.append("Access-Control-Allow-Origin", "*");
+    reqHeader = reqHeader.append("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    reqHeader = reqHeader.append("Authorization", "Token " + this.token);
+    console.log(reqHeader);
+
+    if (this.plt.is('mobileweb')) {
+      this.httpclient.get('http://54.169.232.8:8004/rewards/products/', { headers: reqHeader }).subscribe((response) => {
+        // console.log(response);
+        alert(response)
+        let data: any;
+        data = response;
+        console.log(data);
+      });
+    } else {
+      // this.http.get('http://54.169.232.8:8004/rewards/products/', {}, { reqHeader }).then((response) => {
+      //   // console.log(response);
+      //   alert(response)
+      //   let data: any;
+      //   data = response;
+      //   console.log(data);
+      // });
+      this.httpclient.get('https://128.199.228.223:3000/api/getDistributor').subscribe(
+        data => {
+          alert('ok' + JSON.stringify(data));
+          // console.log('growersData', data);
+        },
+        err => {
+          alert('oops' + JSON.stringify(err));
+        }
+      );
+
+      // router.get("/rewards/products/", (req, res, next) => {
+      //   let token = "Token 166d35eabca17c1089e4662042cf3bb103a28d8d";
+      
+      //   request(
+      //     {
+      //       url: "http://54.169.232.8:8004/rewards/products/",
+      //       method: "GET",
+      //       json: true,
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //         Authorization: token
+      //       }
+      //     },
+      //     function (error, response, body) {
+      //       res.json(body);
+      //     }
+      //   );
+      // });
+    }
   }
 
   // uploadfile(file) {

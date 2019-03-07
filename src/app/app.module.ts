@@ -25,6 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PopoverComponent } from './popover/popover.component';
 import { ModalSelectComponent } from './modal-select/modal-select.component';
 import { CheckoutComponent } from './checkout/checkout.component';
+import { FieldforceService } from './api/fieldforce.service';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    FieldforceService
     // QRScanner,
   ],
   bootstrap: [AppComponent]
