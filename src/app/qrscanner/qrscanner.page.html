@@ -10,8 +10,8 @@
         <br>
         <form #cardno="ngForm">
             <ion-row style="text-align: center; margin: 0 auto;">
-                <ion-input placeholder="" readonly="false" name="qrResultString" [(ngModel)]="qrResultString"
-                    style="border: solid #000; border-width: 2px;"> </ion-input>
+                <ion-input placeholder="" [readonly]="menu == 'purchases' ? true : false" name="qrResultString"
+                    [(ngModel)]="qrResultString" style="border: solid #000; border-width: 2px;"> </ion-input>
             </ion-row>
         </form>
         <ion-row style="text-align: center; margin: 0 auto;">
@@ -20,7 +20,7 @@
         <br>
     </ion-grid>
     <ion-button expand="block" style="--background: #45484d; --background-activated: #45484d; height: 3rem;"
-        (click)="scanCard(cardno)">SCAN CARD</ion-button>
+        (click)="scanCard(cardno)">NEXT</ion-button>
 </ion-content>
 
 <ion-footer>

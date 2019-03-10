@@ -26,6 +26,7 @@ import { PopoverComponent } from './popover/popover.component';
 import { ModalSelectComponent } from './modal-select/modal-select.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { FieldforceService } from './api/fieldforce.service';
+import { FilterProducts, FilterRetailer, FilterProductsUsertype } from './filter.pipe';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,9 @@ import { FieldforceService } from './api/fieldforce.service';
     PopoverComponent,
     ModalSelectComponent,
     CheckoutComponent,
+    FilterProducts,
+    FilterRetailer,
+    FilterProductsUsertype,
   ],
   entryComponents: [
     PopoverComponent,

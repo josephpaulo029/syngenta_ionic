@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>{{fforce.getTitle}}</ion-title>
+    <ion-title>Purchase - {{fforce.getTitle}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -18,7 +18,7 @@
       <ion-label>Date</ion-label>
     </ion-row>
 
-    <ion-row style="text-align: center;">
+    <ion-row style="text-align: left;">
       <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="membershipid"
         [(ngModel)]="fforce.getMemberID"></ion-input>
     </ion-row>
@@ -27,42 +27,45 @@
     </ion-row>
 
     <ion-row>
-      <ion-input placeholder="" readonly="true" name="membership_status" ngModel></ion-input>
+      <ion-input placeholder="" readonly="true" name="membership_status" [(ngModel)]="membershipstatus"></ion-input>
     </ion-row>
     <ion-row>
       <ion-label>Membership Status</ion-label>
     </ion-row>
 
-    <ion-item
-      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
-      <ion-input placeholder="" readonly="true" name="retailer" [(ngModel)]="retailer"> </ion-input>
-      <ion-icon name="arrow-dropdown"></ion-icon>
-    </ion-item>
+    <ion-button
+      style="--padding-start: 0px; --padding-end: 0px; border: solid #000 1px; margin: 0px; margin-bottom: 5px; --color: #000; --color-activated: #000; --color-focused: #000; --background: #fff; --background-activated: #fff; --background-focused: #fff;"
+      fill="solid" expand="full">
+      <ion-item style="width: 100%;">
+        <span
+          slot="start">{{this.fforce.getMemberData[0].first_name.charAt(0).toUpperCase()+this.fforce.getMemberData[0].first_name.substr(1).toLowerCase()}}
+          {{this.fforce.getMemberData[0].middle_name.charAt(0).toUpperCase()+this.fforce.getMemberData[0].middle_name.substr(1).toLowerCase()}}
+          {{this.fforce.getMemberData[0].last_name.charAt(0).toUpperCase()+this.fforce.getMemberData[0].last_name.substr(1).toLowerCase()}}</span>
+        <ion-icon slot="end" name="arrow-dropdown"></ion-icon>
+      </ion-item>
+    </ion-button>
     <ion-row>
       <ion-label>Retailer</ion-label>
     </ion-row>
 
-    <ion-item (click)="openSelect('product')"
-      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
-      <ion-input placeholder="" readonly="true" name="product" [(ngModel)]="selectedProduct"> </ion-input>
-      <ion-icon name="arrow-dropdown"></ion-icon>
-    </ion-item>
+    <ion-button (click)="selectModal('products')"
+      style="--padding-start: 0px; --padding-end: 0px; border: solid #000 1px; margin: 0px; margin-bottom: 5px; --color: #000; --color-activated: #000; --color-focused: #000; --background: #fff; --background-activated: #fff; --background-focused: #fff;"
+      fill="solid" expand="full">
+      <ion-item style="width: 100%;">
+        <span slot="start">{{fforce.chosenProduct == undefined ? 'Select Product': fforce.chosenProduct.name}}</span>
+        <ion-icon slot="end" name="arrow-dropdown"></ion-icon>
+      </ion-item>
+    </ion-button>
     <ion-row>
       <ion-label>Item Name</ion-label>
     </ion-row>
-    <ion-item hidden="true"
-      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
-      <ion-label>Item Name</ion-label>
-      <ion-select placeholder="" #itemSelect name="product" [(ngModel)]="selectedProduct">
-        <ion-select-option value="-1" disabled="true">Select Product</ion-select-option>
-        <!-- <ion-select-option *ngFor="let info of genderList">{{info}}</ion-select-option> -->
-      </ion-select>
-    </ion-item>
 
     <ion-row>
       <ion-col style="border: none; padding: 0px; text-align: left;">
         <ion-row>
-          <ion-input placeholder="" readonly="true" name="uom" ngModel></ion-input>
+          <ion-input placeholder="" readonly="true" name="uom"
+            [value]="fforce.chosenProduct == undefined ?'': fforce.chosenProduct.uom.charAt(0).toUpperCase()+fforce.chosenProduct.uom.substr(1).toLowerCase()">
+          </ion-input>
         </ion-row>
         <ion-row>
           <ion-label>Unit of Measurement(UOM)</ion-label>
@@ -72,7 +75,7 @@
       </ion-col>
       <ion-col style="border: none; padding: 0px;">
         <ion-row>
-          <ion-input placeholder="" name="quantity" ngModel></ion-input>
+          <ion-input placeholder="" name="quantity" type="number" pattern="[0-9]*" [(ngModel)]="itemQty"></ion-input>
         </ion-row>
         <ion-row>
           <ion-label>Quantity</ion-label>
@@ -96,25 +99,27 @@
 
   </form>
 
-  <ion-row>
-    <ion-col style="border: none; padding: 0px;" (click)="addItem()">
-      <ion-row>
-        <ion-input placeholder="" readonly="true" value="ADD ITEM" style="background: #000; color: #fff;"></ion-input>
-      </ion-row>
+  <ion-row class="purchasesBtn">
+    <ion-col style="border: none; padding: 0px;">
+      <ion-button style="color: #fff; --background: #000; --background-activated: #000; --background-focused: #000;"
+        fill="solid" expand="full" (click)="addItem(details)">
+        ADD ITEM
+      </ion-button>
     </ion-col>
     <ion-col size=".1" style="border: none;">
     </ion-col>
     <ion-col style="border: none; padding: 0px;">
-      <ion-row>
-        <ion-input (click)="checkOut()" placeholder="" readonly="true" value="CHECKOUT"
-          style="border-color: #ff0000; background: #ff0000; color: #fff;"></ion-input>
-      </ion-row>
+      <ion-button
+        style="color: #fff; --background: #ff0000; --background-activated: #ff0000; --background-focused: #ff0000;"
+        fill="solid" expand="full" (click)="checkOut(details)">
+        CHECKOUT
+      </ion-button>
     </ion-col>
   </ion-row>
 
 </ion-content>
 
-<ion-content padding *ngIf="fforce.getTitle == 'Growers'">
+<ion-content padding *ngIf="fforce.getTitle == 'Grower'">
   <form #details="ngForm">
     <ion-row>
       <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="dateToday"
@@ -125,7 +130,7 @@
       <ion-label>Date</ion-label>
     </ion-row>
 
-    <ion-row style="text-align: center;">
+    <ion-row style="text-align: left;">
       <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="membershipid"
         [(ngModel)]="fforce.getMemberID"></ion-input>
     </ion-row>
@@ -134,13 +139,27 @@
     </ion-row>
 
     <ion-row>
-      <ion-input placeholder="" readonly="true" name="membership_status" ngModel></ion-input>
+      <ion-input placeholder="" readonly="true" name="membership_status" [(ngModel)]="membershipstatus"></ion-input>
     </ion-row>
     <ion-row>
       <ion-label>Membership Status</ion-label>
     </ion-row>
 
-    <ion-item (click)="openSelect('retailer')"
+    <ion-button (click)="selectModal('retailers')"
+      style="--padding-start: 0px; --padding-end: 0px; border: solid #000 1px; margin: 0px; margin-bottom: 5px; --color: #000; --color-activated: #000; --color-focused: #000; --background: #fff; --background-activated: #fff; --background-focused: #fff;"
+      fill="solid" expand="full">
+      <ion-item style="width: 100%;">
+        <span *ngIf="fforce.chosenRetailer != undefined" slot="start">
+          {{fforce.chosenRetailer.first_name.charAt(0).toUpperCase()+fforce.chosenRetailer.first_name.substr(1).toLowerCase()}}
+          {{fforce.chosenRetailer.middle_name.charAt(0).toUpperCase()+fforce.chosenRetailer.middle_name.substr(1).toLowerCase()}}
+          {{fforce.chosenRetailer.last_name.charAt(0).toUpperCase()+fforce.chosenRetailer.last_name.substr(1).toLowerCase()}}</span>
+        <span *ngIf="fforce.chosenRetailer == undefined" slot="start">
+          Select Retailer</span>
+        <ion-icon slot="end" name="arrow-dropdown"></ion-icon>
+      </ion-item>
+    </ion-button>
+
+    <ion-item *ngIf="false" (click)="selectModal('retailers')"
       style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
       <ion-input placeholder="" readonly="true" name="retailer" [(ngModel)]="selectedRetailer"> </ion-input>
       <ion-icon name="arrow-dropdown"></ion-icon>
@@ -148,16 +167,17 @@
     <ion-row>
       <ion-label>Retailer</ion-label>
     </ion-row>
-    <ion-item hidden="true"
-      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
-      <ion-label>Retailer</ion-label>
-      <ion-select placeholder="" #itemRetailer name="retailer" [(ngModel)]="selectedRetailer">
-        <ion-select-option value="-1" disabled="true">Select Product</ion-select-option>
-        <!-- <ion-select-option *ngFor="let info of genderList">{{info}}</ion-select-option> -->
-      </ion-select>
-    </ion-item>
 
-    <ion-item (click)="openSelect('product')"
+    <ion-button (click)="selectModal('products')"
+      style="--padding-start: 0px; --padding-end: 0px; border: solid #000 1px; margin: 0px; margin-bottom: 5px; --color: #000; --color-activated: #000; --color-focused: #000; --background: #fff; --background-activated: #fff; --background-focused: #fff;"
+      fill="solid" expand="full">
+      <ion-item style="width: 100%;">
+        <span slot="start">{{fforce.chosenProduct == undefined ? 'Select Product': fforce.chosenProduct.name}}</span>
+        <ion-icon slot="end" name="arrow-dropdown"></ion-icon>
+      </ion-item>
+    </ion-button>
+
+    <ion-item *ngIf="false" (click)="selectModal('products')"
       style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
       <ion-input placeholder="" readonly="true" name="product" [(ngModel)]="selectedProduct"> </ion-input>
       <ion-icon name="arrow-dropdown"></ion-icon>
@@ -165,19 +185,13 @@
     <ion-row>
       <ion-label>Item Name</ion-label>
     </ion-row>
-    <ion-item hidden="true"
-      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
-      <ion-label>Item Name</ion-label>
-      <ion-select placeholder="" #itemSelect name="product" [(ngModel)]="selectedProduct">
-        <ion-select-option value="-1" disabled="true">Select Product</ion-select-option>
-        <!-- <ion-select-option *ngFor="let info of genderList">{{info}}</ion-select-option> -->
-      </ion-select>
-    </ion-item>
 
     <ion-row>
       <ion-col style="border: none; padding: 0px; text-align: left;">
         <ion-row>
-          <ion-input placeholder="" readonly="true" name="uom" ngModel></ion-input>
+            <ion-input placeholder="" readonly="true" name="uom"
+            [value]="fforce.chosenProduct == undefined ?'': fforce.chosenProduct.uom.charAt(0).toUpperCase()+fforce.chosenProduct.uom.substr(1).toLowerCase()">
+          </ion-input>
         </ion-row>
         <ion-row>
           <ion-label>Unit of Measurement(UOM)</ion-label>
@@ -187,7 +201,7 @@
       </ion-col>
       <ion-col style="border: none; padding: 0px;">
         <ion-row>
-          <ion-input placeholder="" name="quantity" ngModel></ion-input>
+          <ion-input placeholder="" name="quantity" type="number" pattern="[0-9]*" [(ngModel)]="itemQty"></ion-input>
         </ion-row>
         <ion-row>
           <ion-label>Quantity</ion-label>
@@ -211,21 +225,24 @@
 
   </form>
 
-  <ion-row>
-    <ion-col style="border: none; padding: 0px;" (click)="addItem()">
-      <ion-row>
-        <ion-input placeholder="" readonly="true" value="ADD ITEM" style="background: #000; color: #fff;"></ion-input>
-      </ion-row>
+  <ion-row class="purchasesBtn">
+    <ion-col style="border: none; padding: 0px;">
+      <ion-button style="color: #fff; --background: #000; --background-activated: #000; --background-focused: #000;"
+        fill="solid" expand="full" (click)="addItem(details)">
+        ADD ITEM
+      </ion-button>
     </ion-col>
     <ion-col size=".1" style="border: none;">
     </ion-col>
-    <ion-col style="border: none; padding: 0px;" (click)="checkOut()">
-      <ion-row>
-        <ion-input placeholder="" readonly="true" value="CHECKOUT"
-          style="border-color: #ff0000; background: #ff0000; color: #fff;"></ion-input>
-      </ion-row>
+    <ion-col style="border: none; padding: 0px;">
+      <ion-button
+        style="color: #fff; --background: #ff0000; --background-activated: #ff0000; --background-focused: #ff0000;"
+        fill="solid" expand="full" (click)="checkOut(details)">
+        CHECKOUT
+      </ion-button>
     </ion-col>
   </ion-row>
+
 </ion-content>
 
 <ion-footer>

@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <form #checkoutDetails="ngForm">
     <ion-row>
       <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="dateToday"
@@ -18,7 +18,7 @@
       <ion-label>Date</ion-label>
     </ion-row>
 
-    <ion-row style="text-align: center;">
+    <ion-row style="text-align: left;">
       <ion-input placeholder="" readonly="true" style="background: #000; color: #fff;" name="membershipid"
         [(ngModel)]="fforce.getMemberID"></ion-input>
     </ion-row>
@@ -27,7 +27,7 @@
     </ion-row>
 
     <ion-row>
-      <ion-input placeholder="" readonly="true" name="membership_status" ngModel></ion-input>
+      <ion-input placeholder="" readonly="true" name="membership_status" [(ngModel)]="membershipstatus"></ion-input>
     </ion-row>
     <ion-row>
       <ion-label>Membership Status</ion-label>
@@ -46,21 +46,44 @@
       <!-- <ion-input placeholder="" name="email" ngModel></ion-input> -->
     </ion-row>
   </form>
-</ion-content>
 
-<ion-content>
   <ion-row style="background: #000; color: #fff;">
     <ion-col style="text-align: center; padding: 0px;">
-      <ion-label style="font-size: .9rem;">Purchased Summary</ion-label>
+      <ion-label style="font-size: .8rem; font-weight: 300;">Purchased Summary</ion-label>
     </ion-col>
   </ion-row>
 
+  <ion-list class="cartStyle">
+    <ion-item *ngFor="let info of cartData; let i = index">
+      <ion-row>
+        <ion-col>
+          <ion-label class="header">{{info.name}}</ion-label>
+          <ion-label>UOM: {{info.uom}}</ion-label>
+          <ion-label>Quantity: {{info.quantity}}</ion-label>
+          <ion-label>Total Points: {{info.tierpoint * info.quantity}}</ion-label>
+
+        </ion-col>
+        <ion-col size="2" style="text-align: right;">
+          <ion-button class="editBtn" (click)="presentAlertPrompt(info)">
+            <ion-icon slot="icon-only" name="create"></ion-icon>
+          </ion-button>
+        </ion-col>
+        <ion-col size="2" style="text-align: right;">
+          <ion-button class="deleteBtn" (click)="removeItem(i)">
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+    </ion-item>
+  </ion-list>
+
   <ion-row style="background: #000; color: #fff;">
     <ion-col style="text-align: left;">
-      <ion-label style="font-size: .9rem;">TOTAL POINTS TO BE AWARDED</ion-label>
+      <ion-label style="font-size: .8rem;">TOTAL POINTS TO BE AWARDED</ion-label>
     </ion-col>
     <ion-col size="3" style="text-align: right;">
-      <ion-label style="font-size: .9rem;">POINTS</ion-label>
+      <ion-label style="font-size: .8rem;">{{totalPoints || 0}} POINTS</ion-label>
     </ion-col>
   </ion-row>
 
@@ -71,7 +94,7 @@
   </ion-row>
 </ion-content>
 
-<ion-footer>
+<ion-footer *ngIf="false">
   <ion-toolbar>
     <ion-title>
       <img src="assets/img/SYNGENTA WHITE.png">

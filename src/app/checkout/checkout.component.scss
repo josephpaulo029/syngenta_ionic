@@ -19,6 +19,51 @@
     }
 
     ion-content {
+        form {
+            padding: 10px;
+        }
+        .cartStyle {
+            margin-bottom: 20px;
+            ion-item {
+                border: solid #000;
+                border-width: 0px 0px 1px 0px;
+                ion-row {
+                    margin: 0px;
+                    width: 100%;
+                    ion-col {
+                        margin-top: 10px;
+                        text-align: left;
+                        border: none;
+                        ion-label {
+                            font-size: .8rem;
+                        }
+                        .header {
+                            font-size: .9rem;
+                            font-weight: 600;
+                        }
+                        ion-button {
+                            height: 70%;
+                        }
+                        .deleteBtn {
+                            --background: #45484d;
+                            --background-activated: #45484d;
+                            --background-focused: #45484d;
+                            --color: #fff;
+                            --color-activated: #fff;
+                            --color-focused: #fff;
+                        }
+                        .editBtn {
+                            --background: #ddd;
+                            --background-activated: #ddd;
+                            --background-focused: #ddd;
+                            --color: #000;
+                            --color-activated: #000;
+                            --color-focused: #000;
+                        }
+                    }
+                }
+            }
+        }
         ion-row {
             // text-align: center; 
             margin: 0 auto;

@@ -49,6 +49,17 @@
         }
     }
 
+    .purchasesBtn {
+        ion-col {
+            ion-button {
+                color: #000;
+                --background: #fff;
+                --background-activated: #fff;
+                --background-focused: #fff;
+            }
+        }
+    }
+
     ion-footer {
         ion-toolbar {
             height: 50px;

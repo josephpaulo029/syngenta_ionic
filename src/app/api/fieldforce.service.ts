@@ -1,3 +1,4 @@
+import { FilterProductsUsertype } from './../filter.pipe';
 import { Injectable } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import {
@@ -13,7 +14,7 @@ import {
 import { HTTP } from '@ionic-native/http/ngx';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Platform, LoadingController } from '@ionic/angular';
+import { Platform, LoadingController, ToastController, AlertController } from '@ionic/angular';
 import { tokenKey } from '@angular/core/src/view';
 // import * as aws from "aws-sdk/";
 // import * as S3 from 'aws-sdk/clients/s3';
@@ -25,124 +26,84 @@ interface myData {
   providedIn: 'root'
 })
 export class FieldforceService {
-  _title: any;
-  _memberid: any;
-  location: any;
-  link: any;
-  link2: any;
-  token: any = '166d35eabca17c1089e4662042cf3bb103a28d8d';
-  headersToken = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Token ' + this.token });
+  token: any = 'bc5bd1d42315d7c9081f74121589b1c0aacd61e2';
+  headers = new HttpHeaders()
+    .set("Content-Type", "application/json")
 
+  headersToken = new HttpHeaders()
+    .set("Content-Type", "application/json")
+    .set("Authorization", "Token " + localStorage.getItem('token'))
+
+  _cart: any;
+  set getCartData(value: any) {
+    this._cart = value;
+  }
+  get getCartData(): any {
+    return this._cart;
+  }
+  _title: any;
   set getTitle(value: any) {
     this._title = value;
   }
-
   get getTitle(): any {
     return this._title;
   }
-
+  _memberid: any;
   set getMemberID(value: any) {
     this._memberid = value;
   }
-
   get getMemberID(): any {
     return this._memberid;
   }
-
-  _selectedProvince: any;
-  set selectedProvince(value: any) {
-    this._selectedProvince = value;
+  _memberdata: any;
+  set getMemberData(value: any) {
+    this._memberdata = value;
   }
-
-  get selectedProvince(): any {
-    return this._selectedProvince;
+  get getMemberData(): any {
+    return this._memberdata;
   }
-
-  _selectedCity: any;
-  set selectedCity(value: any) {
-    this._selectedCity = value;
+  _product: any;
+  set chosenProduct(value: any) {
+    this._product = value;
   }
-
-  get selectedCity(): any {
-    return this._selectedCity;
+  get chosenProduct(): any {
+    return this._product;
   }
-
-
-
-
+  _retailer: any;
+  set chosenRetailer(value: any) {
+    this._retailer = value;
+  }
+  get chosenRetailer(): any {
+    return this._retailer;
+  }
+  location: any;
+  link: any;
+  dev: any;
   locationList: any;
   provinceList: any = [];
   cityList: any = [];
-  loading: any;
+  loading: any = new LoadingController;
+  alert: any;
+  productList: any;
+  retailerList: any;
+  ngrok: any;
+  localhosts: any;
+
   constructor(
     public plt: Platform,
     private geolocation: Geolocation,
     private http: HTTP,
     private httpclient: HttpClient,
-    public loadingCtrl: LoadingController
-
+    public loadingCtrl: LoadingController,
+    public toastController: ToastController,
+    public alertController: AlertController,
   ) {
-    this.link2 = "http://54.169.232.8:8004";
+    this.dev = "http://54.169.232.8:8004";
     this.link = "https://128.199.228.223:3000"
-    // this.link = "http://localhost:3000/"
+    this.ngrok = "http://768e52cd.ngrok.io"
+    this.localhosts = "http://localhost:3000"
+    this.preLoadData()
 
-    this.loadLocations();
-    this.sample();
-  }
-
-  sample() {
-    let reqHeader: HttpHeaders = new HttpHeaders();
-    reqHeader = reqHeader.append("Content-Type", "application/json");
-    reqHeader = reqHeader.append("Access-Control-Allow-Origin", "*");
-    reqHeader = reqHeader.append("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    reqHeader = reqHeader.append("Authorization", "Token " + this.token);
-    console.log(reqHeader);
-
-    if (this.plt.is('mobileweb')) {
-      this.httpclient.get('http://54.169.232.8:8004/rewards/products/', { headers: reqHeader }).subscribe((response) => {
-        // console.log(response);
-        alert(response)
-        let data: any;
-        data = response;
-        console.log(data);
-      });
-    } else {
-      // this.http.get('http://54.169.232.8:8004/rewards/products/', {}, { reqHeader }).then((response) => {
-      //   // console.log(response);
-      //   alert(response)
-      //   let data: any;
-      //   data = response;
-      //   console.log(data);
-      // });
-      this.httpclient.get('https://128.199.228.223:3000/api/getDistributor').subscribe(
-        data => {
-          alert('ok' + JSON.stringify(data));
-          // console.log('growersData', data);
-        },
-        err => {
-          alert('oops' + JSON.stringify(err));
-        }
-      );
-
-      // router.get("/rewards/products/", (req, res, next) => {
-      //   let token = "Token 166d35eabca17c1089e4662042cf3bb103a28d8d";
-      
-      //   request(
-      //     {
-      //       url: "http://54.169.232.8:8004/rewards/products/",
-      //       method: "GET",
-      //       json: true,
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //         Authorization: token
-      //       }
-      //     },
-      //     function (error, response, body) {
-      //       res.json(body);
-      //     }
-      //   );
-      // });
-    }
   }
 
   // uploadfile(file) {
@@ -180,160 +141,175 @@ export class FieldforceService {
 
   //   });
   // }
-  async presentLoading() {
-    this.loading = await this.loadingCtrl.create({
-      message: '',
+  async presentAlert(msg) {
+    this.alert = await this.alertController.create({
+      header: 'Warning',
+      // subHeader: 'Subtitle',
+      message: msg,
+      buttons: ['OK']
     });
-    await this.loading.present();
+    this.alert.present();
   }
 
-  async loadLocations() {
-    if (this.plt.is('mobileweb')) {
-      return new Promise(resolve => {
-        this.httpclient.get(this.link + '/region', {}).subscribe((response) => {
-          // console.log(response);
-          let locations: any;
-          locations = response;
-          // console.log(locations);
-          resolve(locations);
-        });
-      });
-    } else {
+  async presentLoading(msg) {
+    this.loading = await this.loadingCtrl.create({
+      message: msg,
+    });
+    return await this.loading.present();
+  }
 
-      return new Promise(resolve => {
-        this.http.get(this.link2 + '/static/locations.json', {}, {}).then((response) => {
-          // console.log(response);
-          let locations: any;
-          locations = response;
-          // console.log(locations);
-          resolve(locations);
-        });
+  async presentToast(msg) {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 2000,
+      color: "dark",
+      // showCloseButton: true,
+      position: 'bottom',
+      cssClass: "toastStyle",
+      // closeButtonText: 'Done'
+    });
+    toast.present();
+  }
 
-      });
+  getMembershipStatus(tier) {
+    switch (tier) {
+      case 1:
+        return 'Classic'
+      case 2:
+        return 'Premium'
+      case 3:
+        return 'Platinum'
+
+      default:
+        break;
     }
   }
 
-  login(info) {
-    console.log(info);
+  async login(info) {
+    await this.presentLoading('Logging In...')
     let data: any = {};
     data = {
-      username: info.username,
-      password: info.password,
+      username: "jim2019",
+      password: "icanseeyou",
     }
-    // data = {
-    //   username: "jim2019",
-    //   password: "icanseeyou",
-    // }
 
-    if (this.plt.is('mobileweb')) {
-      return new Promise(resolve => {
-        this.httpclient.post(this.link2 + '/auth/token/login/', data).subscribe((response) => {
-          // console.log(response);
+    return new Promise(resolve => {
+      this.httpclient.post(this.ngrok + '/api/auth/token/login/', data).subscribe(
+        response => {
+          this.loading.dismiss();
           let res;
           res = response;
           if (res.auth_token) {
             this.token = res.auth_token;
             localStorage.setItem('token', res.auth_token);
-            // this.getProducts();
-
             resolve(true);
           } else {
             resolve(false);
           }
-        });
+        },
+        err => {
+          this.loading.dismiss();
+          alert(JSON.stringify(err));
+        }
+      );
+
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  async preLoadData() {
+    await this.loadLocations();
+    await this.getProducts();
+    await this.getRetailerList();
+  }
+
+  async loadLocations() {
+    return new Promise(resolve => {
+      this.httpclient.get(this.ngrok + '/api/locations').subscribe((response) => {
+        let locations: any;
+        locations = response;
+        console.log(locations);
+        resolve(locations);
       });
-    } else {
-      return new Promise(resolve => {
-        // alert(JSON.stringify(data))
-        this.http.post(this.link2 + '/auth/token/login/', data, {}).then((response) => {
-          // alert(JSON.stringify(JSON.parse(response.data)));
-          console.log(response)
-          let res;
-          res = JSON.parse(response.data);
-          if (res.auth_token) {
-            this.token = res.auth_token;
-            localStorage.setItem('token', res.auth_token);
-            resolve(true);
-          } else {
-            resolve(false);
-          }
-        }).catch(error => {
-          // alert(JSON.stringify(error))
-          console.log(error);
-          console.log(error.error); // error message as string
-          console.log(error.headers);
-
-        });
-
-      })
-    }
+    });
   }
 
   getMessages() {
-    if (this.plt.is('mobileweb')) {
-      return new Promise(resolve => {
-        this.httpclient.get(this.link + '/get/message/fieldforce/').subscribe((response) => {
-          // console.log(response);
-          // alert(response);
+    return new Promise(resolve => {
+      this.httpclient.post(this.ngrok + '/api/messages/fieldforces/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe((response) => {
+        // console.log(response);
+        // alert(response);
 
-          resolve(response)
-        });
+        resolve(response)
       });
-    } else {
-      return new Promise(resolve => {
-        this.http.get(this.link + '/get/message/fieldforce/', {}, {}).then((response) => {
-          console.log(response);
-
-          // alert(JSON.stringify(JSON.parse(response.data)));
-        }).catch(error => {
-          // alert(JSON.stringify(error))
-          console.log(error.status);
-          console.log(error.error); // error message as string
-          console.log(error.headers);
-
-        });
-
-      });
-    }
+    });
   }
 
   getProducts() {
-    let user = {
-      "username": "jim2019",
-      "password": "icanseeyou"
-    }
-    let wew = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Token ' + this.token });
-    console.log(wew)
-    if (this.plt.is('mobileweb')) {
-      return new Promise(resolve => {
-        this.http.get(this.link2 + '/rewards/products/', { user }, { wew }).then((response) => {
-          // console.log(response);
-          alert(JSON.stringify(response));
+    return new Promise(resolve => {
+      this.httpclient.post(this.ngrok + '/api/rewards/products/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+        data => {
+          this.productList = data;
+          console.log(data);
+          resolve(data)
+        },
+        err => {
+          this.loading.dismiss();
+          alert(JSON.stringify(err));
+        }
+      );
+    }).catch(err => {
+      console.log(err)
+    })
+  }
 
-          resolve(response)
-        });
-      });
-    } else {
-      return new Promise(resolve => {
-        this.http.get(this.link2 + '/rewards/products/', { parameters: user }, { headers: wew }).then((response) => {
-          // console.log(response);
-          alert(JSON.stringify(response));
+  getRetailerList() {
+    return new Promise(resolve => {
+      this.httpclient.post(this.ngrok + '/api/users/retailers/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+        data => {
+          this.retailerList = data;
+          console.log(data);
+          resolve(data)
+        },
+        err => {
+          this.loading.dismiss();
+          alert(JSON.stringify(err));
+        }
+      );
+    }).catch(err => {
+      console.log(err)
+    })
+  }
 
-          resolve(response)
-        }).catch(error => {
-          // alert(JSON.stringify(error))
-          console.log(error.status);
-          console.log(error.error); // error message as string
-          console.log(error.headers);
-
-        });
-
-      });
-    }
+  async memberidVerification(info) {
+    await this.presentLoading('Validating membership id');
+    return new Promise(resolve => {
+      this.httpclient.post(this.ngrok + '/api/users/' + info.type + '/' + info.memberid, { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+        data => {
+          this.loading.dismiss();
+          // console.log(data);
+          let response;
+          response = data
+          if (response[0]) {
+            resolve(data)
+          } else {
+            resolve(false)
+          }
+          // this.retailerList = data;
+        },
+        err => {
+          this.loading.dismiss();
+          alert(JSON.stringify(err));
+        }
+      );
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
   ngOnDestroy() {
-    localStorage.removeItem('token');
+    // localStorage.removeItem('token');
   }
 
   log(message: string) {

@@ -8,13 +8,22 @@
 </ion-header>
 
 <ion-content>
-  <ion-searchbar animated></ion-searchbar>
+  <ion-searchbar animated [(ngModel)]="searchText"></ion-searchbar>
 
-  <ion-list>
-    <ion-item *ngFor="let info of value" (click)="closeModal(info)">
-      <ion-label>{{info}}</ion-label>
+  <ion-list *ngIf="type == 'products'">
+    <ion-item *ngFor="let info of value | filterProducts: searchText" (click)="closeModal(info)">
+      <ion-label>{{info.name}}</ion-label>
     </ion-item>
   </ion-list>
+
+  <ion-list *ngIf="type == 'retailers'">
+    <ion-item *ngFor="let info of value | filterRetailer: searchText" (click)="closeModal(info)">
+      <ion-label>{{info.first_name.charAt(0).toUpperCase()+info.first_name.substr(1).toLowerCase()}}
+        {{info.middle_name.charAt(0).toUpperCase()+info.middle_name.substr(1).toLowerCase()}}
+        {{info.last_name.charAt(0).toUpperCase()+info.last_name.substr(1).toLowerCase()}}</ion-label>
+    </ion-item>
+  </ion-list>
+
 </ion-content>
 
 <ion-footer>

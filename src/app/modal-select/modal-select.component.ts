@@ -11,6 +11,7 @@ export class ModalSelectComponent implements OnInit {
   @Input() modal_title: any;
   @Input() value: any;
   @Input() type: any;
+  searchText: any;
   constructor(
     navParams: NavParams,
     private nav: NavController,
@@ -29,14 +30,16 @@ export class ModalSelectComponent implements OnInit {
   }
 
   closeModal(selected) {
-    let selectData = selected
+    let selectData;
+    selectData = selected
+
     if (selected == '') {
       switch (this.type) {
-        case 'province':
-          selectData = this.fforce.selectedProvince
+        case 'products':
+        selectData = this.fforce.chosenProduct
           break;
-        case 'city':
-          selectData = this.fforce.selectedCity
+        case 'retailers':
+        selectData = this.fforce.chosenRetailer
           break;
 
         default:
