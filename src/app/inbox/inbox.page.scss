@@ -17,6 +17,81 @@
             }
         }
     }
+    
+    ion-content {
+        .cartStyle {
+            margin-bottom: 20px;
+            ion-item {
+                --background: #f7f7f7;
+                border: solid #000;
+                border-width: 0px 0px 1px 0px;
+                ion-row {
+                    margin: 0px;
+                    width: 100%;
+                    ion-col {
+                        margin-top: 10px;
+                        text-align: left;
+                        border: none;
+                        ion-label {
+                            font-size: .8rem;
+                        }
+                        .header {
+                            font-size: .9rem;
+                            font-weight: 600;
+                        }
+                        ion-button {
+                            height: 70%;
+                        }
+                        .deleteBtn {
+                            --background: #45484d;
+                            --background-activated: #45484d;
+                            --background-focused: #45484d;
+                            --color: #fff;
+                            --color-activated: #fff;
+                            --color-focused: #fff;
+                        }
+                        .editBtn {
+                            --background: #ddd;
+                            --background-activated: #ddd;
+                            --background-focused: #ddd;
+                            --color: #000;
+                            --color-activated: #000;
+                            --color-focused: #000;
+                        }
+                    }
+                }
+            }
+        }
+        ion-row {
+            // text-align: center; 
+            margin: 0 auto;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            ion-col {
+                text-align: center;
+                border: solid #000; 
+                border-width: 1px;
+            }
+
+            ion-input {
+                border: solid #000; 
+                border-width: 1px;
+            }
+
+            .ios ion-input {
+                border: solid #000; 
+                border-width: 1px;
+                padding-left: 10px !important;
+            }
+
+            ion-label {
+                font-size: 1rem;
+                margin-top: -5px;
+                margin-bottom: 5px;
+            }
+        }
+    }
+    
 
     ion-footer {
         ion-toolbar {

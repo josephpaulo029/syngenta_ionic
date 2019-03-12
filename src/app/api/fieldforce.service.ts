@@ -88,6 +88,7 @@ export class FieldforceService {
   retailerList: any;
   ngrok: any;
   localhosts: any;
+  fieldforceData: any;
 
   constructor(
     public plt: Platform,
@@ -100,7 +101,7 @@ export class FieldforceService {
   ) {
     this.dev = "http://54.169.232.8:8004";
     this.link = "https://128.199.228.223:3000"
-    this.ngrok = "http://768e52cd.ngrok.io"
+    this.ngrok = "http://86d3180a.ngrok.io"
     this.localhosts = "http://localhost:3000"
     this.preLoadData()
 
@@ -196,13 +197,27 @@ export class FieldforceService {
     return new Promise(resolve => {
       this.httpclient.post(this.ngrok + '/api/auth/token/login/', data).subscribe(
         response => {
-          this.loading.dismiss();
           let res;
           res = response;
           if (res.auth_token) {
             this.token = res.auth_token;
             localStorage.setItem('token', res.auth_token);
-            resolve(true);
+
+            this.httpclient.post(this.ngrok + '/api/users/fieldforces/me/' + this.token, { headers: this.headers }).subscribe(
+              res => {
+                console.log(res)
+                this.fieldforceData = res
+                localStorage.setItem('fieldforce', JSON.stringify(this.fieldforceData));
+
+                this.loading.dismiss();
+
+                resolve(true);
+              },
+              err => {
+                this.loading.dismiss();
+                alert(JSON.stringify(err));
+              }
+            );
           } else {
             resolve(false);
           }

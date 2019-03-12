@@ -54,7 +54,7 @@
   </ion-row>
 
   <ion-list class="cartStyle">
-    <ion-item *ngFor="let info of cartData; let i = index">
+    <ion-item *ngFor="let info of cartData.product; let i = index">
       <ion-row>
         <ion-col>
           <ion-label class="header">{{info.name}}</ion-label>
@@ -64,7 +64,7 @@
 
         </ion-col>
         <ion-col size="2" style="text-align: right;">
-          <ion-button class="editBtn" (click)="presentAlertPrompt(info)">
+          <ion-button class="editBtn" (click)="editItem(info)">
             <ion-icon slot="icon-only" name="create"></ion-icon>
           </ion-button>
         </ion-col>

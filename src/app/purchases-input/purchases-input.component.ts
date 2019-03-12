@@ -68,7 +68,7 @@ export class PurchasesInputComponent implements OnInit {
     if (details.value.invoice == '' || details.value.invoice == null) {
       this.fforce.presentAlert('Please input you Invoice/Official Receipt Reference')
     }
-    else if (this.purchaseInfo.product.length < 1) {
+    else if (this.cart.length < 1) {
       this.fforce.presentToast('NO PRODUCT ON CHECKOUT')
 
     } else {

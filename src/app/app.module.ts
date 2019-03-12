@@ -27,7 +27,7 @@ import { ModalSelectComponent } from './modal-select/modal-select.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { FieldforceService } from './api/fieldforce.service';
 import { FilterProducts, FilterRetailer, FilterProductsUsertype } from './filter.pipe';
-
+import { CurrencyMaskModule } from "ng2-currency-mask";
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,6 +61,7 @@ import { FilterProducts, FilterRetailer, FilterProductsUsertype } from './filter
     AppRoutingModule,
     ZXingScannerModule.forRoot(),
     HttpClientModule,
+    CurrencyMaskModule,
   ],
   providers: [
     StatusBar,

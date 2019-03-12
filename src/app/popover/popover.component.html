@@ -1,4 +1,4 @@
-<ion-row justify-content-center align-items-center>
+<ion-row *ngIf="type == undefined" justify-content-center align-items-center>
   <ion-col (click)="capture()">
     <ion-icon name="camera"></ion-icon><br>
     <ion-label> TAKE PHOTO </ion-label>
@@ -8,3 +8,42 @@
     <ion-label> ATTACHED IMAGE </ion-label>
   </ion-col>
 </ion-row>
+
+<ion-content *ngIf="type == 'editqty'">
+  <ion-row class="prodDetails">
+    <ion-col>
+      <ion-label> Product Name </ion-label><br>
+      <ion-label> UOM </ion-label><br>
+      <ion-label> Current Quantity </ion-label><br>
+    </ion-col>
+    <ion-col>
+      <ion-label> {{value.name}} </ion-label><br>
+      <ion-label> {{value.uom}} </ion-label><br>
+      <ion-label> {{value.quantity}} </ion-label><br>
+    </ion-col>
+  </ion-row>
+  <ion-row class="qtyDetails">
+    <input currencyMask [options]="{ precision: 0, prefix: '', thousands: ',', decimal: '.', allowNegative: false }" autocomplete="off" placeholder="Qty" name="quantity" [(ngModel)]="itemQty">
+    <!-- <input currencyMask style="text-align: left; font-size: 1rem; font-weight: 600;" class="form-control"
+      [options]="{ prefix: '', thousands: ',', decimal: '.', allowNegative: false }" autocomplete="off" name="amount"
+      (keypress)="addAmt(prod, amt);" (keydown)="addAmt(prod, amt);" placeholder="0" ngModel> -->
+  </ion-row>
+  <ion-row class="qtyDetails">
+    <ion-label> UPDATE QUANTITY </ion-label>
+  </ion-row>
+  <ion-row class="qtyDetails">
+    <ion-button (click)="updateAmt()"
+      style="color: #fff; --background: #ff0000; --background-activated: #ff0000; --background-focused: #ff0000;"
+      fill="solid" expand="full">
+      UPDATE
+    </ion-button>
+  </ion-row>
+  <ion-row class="qtyDetails">
+    <ion-button (click)="closeModal()"
+      style="color: #fff; --background: #018577; --background-activated: #018577; --background-focused: #018577;"
+      fill="solid" expand="full">
+      CLOSE
+    </ion-button>
+  </ion-row>
+
+</ion-content>

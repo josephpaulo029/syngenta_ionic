@@ -13,4 +13,47 @@
             }
         }
     }
+
+    ion-content {
+        .prodDetails {
+            padding: 10px;
+            padding-bottom: 15px;
+            ion-col {
+                text-align: left;
+                ion-label {
+                    font-size: .9rem;
+                    font-weight: 600;
+                    line-height: 25px;
+                    color: #000;
+                }
+            }
+        }
+        .qtyDetails {
+            width: 80%;
+            margin: 0 auto;
+            margin-bottom: 5px;
+            input {
+                text-align: center !important;
+                font-size: 1rem;
+                font-weight: 600;
+                width: 100%;
+                border: solid #000 1px;
+                font-size: 1.3rem;
+                line-height: 35px;
+            }
+
+            ion-label {
+                text-align: center;
+                font-size: .9rem;
+                margin: 0 auto;
+                margin-bottom: 5px;
+            }
+
+            ion-button {
+                width: 100%;
+                border: solid 1px;
+            }
+        }
+        
+    }
 }

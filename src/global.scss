@@ -21,6 +21,18 @@
     border-width: 2px;
  }
 
+ .editqty-css .modal-wrapper {
+   // height: 50%;
+   height: 350px;
+   width: 90%;
+   top: calc(100% - 75%);
+   position: absolute;
+   display: block;
+   background: #fff;
+   border: solid #000;
+   border-width: 2px;
+}
+
  .toastStyle {
     text-align:center;
  }

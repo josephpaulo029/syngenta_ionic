@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-
+import { FieldforceService } from './api/fieldforce.service';
+import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -42,23 +42,26 @@ export class AppComponent {
     //   icon: 'list'
     // }
   ];
-
-  userDetails = {
-    id: 1,
-    name: 'John Doe',
-    userImg: 'assets/img/profile_user.jpg',
-    userType: 'Admin',
-    memberID: 'f000001',
-    date: 'February 21, 2019',
-    time: '10:30 AM'
-  }
+  userDetails: any;
+  dateNow: any;
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    public fforce: FieldforceService,
+    private router: Router,
+
   ) {
     this.initializeApp();
+    this.dateNow = Date.now();
+    console.log(localStorage.getItem('fieldforce') != null);
+    console.log(localStorage.getItem('token') != null);
+    if(localStorage.getItem('token') != null){
+      this.router.navigate(['/dashboard']);
+      this.userDetails = JSON.parse(localStorage.getItem('fieldforce'))
+      console.log(this.userDetails)
+    }
   }
 
   initializeApp() {
@@ -66,5 +69,13 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+  }
+
+  onClick(info) {
+    console.log(info)
+    if (info.url == '/login') {
+      localStorage.removeItem('fieldforce');
+      localStorage.removeItem('token');
+    }
   }
 }

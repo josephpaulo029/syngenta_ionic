@@ -11,6 +11,9 @@ import { FieldforceService } from '../api/fieldforce.service';
 })
 export class PopoverComponent implements OnInit {
   imgData: any;
+  @Input() type: any;
+  @Input() value: any;
+  itemQty: any;
 
   constructor(
     navParams: NavParams,
@@ -24,7 +27,9 @@ export class PopoverComponent implements OnInit {
     // componentProps can also be accessed at construction time using NavParams
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    console.log(this.type);
+  }
 
   capture() {
     let options: CaptureImageOptions = { limit: 1 }
@@ -58,8 +63,28 @@ export class PopoverComponent implements OnInit {
     }, (err) => { });
   }
 
+  updateAmt() {
+    console.log(this.itemQty)
+    if (this.itemQty == undefined || this.itemQty == 0) {
+      this.fforce.presentToast('Quantity must not be 0')
+    } else {
+      this.closeModal()
+    }
+  }
+
   closeModal() {
-    this.modalCtrl.dismiss({ img: this.imgData });
+    switch (this.type) {
+      case 'undefined':
+        this.modalCtrl.dismiss({ img: this.imgData });
+        break;
+
+      case 'editqty':
+        this.modalCtrl.dismiss({ qty: this.itemQty });
+        break;
+
+      default:
+        break;
+    }
   }
 
 }
