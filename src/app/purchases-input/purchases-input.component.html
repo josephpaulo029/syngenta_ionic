@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <ion-buttons slot="start" style="font-size: 2rem; color: #fff; margin-left: -5px;" (click)="backtoScan()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-buttons>
+    <ion-buttons *ngIf="false" slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>Purchase - {{fforce.getTitle}}</ion-title>
@@ -84,7 +87,7 @@
     </ion-row>
 
     <ion-row>
-      <ion-input placeholder="" name="invoice" ngModel></ion-input>
+      <ion-input placeholder="" name="invoice" [(ngModel)]="invoiceData"></ion-input>
     </ion-row>
     <ion-row>
       <ion-label>Invoice/Official Receipt Reference</ion-label>
@@ -189,7 +192,7 @@
     <ion-row>
       <ion-col style="border: none; padding: 0px; text-align: left;">
         <ion-row>
-            <ion-input placeholder="" readonly="true" name="uom"
+          <ion-input placeholder="" readonly="true" name="uom"
             [value]="fforce.chosenProduct == undefined ?'': fforce.chosenProduct.uom.charAt(0).toUpperCase()+fforce.chosenProduct.uom.substr(1).toLowerCase()">
           </ion-input>
         </ion-row>
@@ -210,7 +213,7 @@
     </ion-row>
 
     <ion-row>
-      <ion-input placeholder="" name="invoice" ngModel></ion-input>
+      <ion-input placeholder="" name="invoice" [(ngModel)]="invoiceData"></ion-input>
     </ion-row>
     <ion-row>
       <ion-label>Invoice/Official Receipt Reference</ion-label>

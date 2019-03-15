@@ -16,7 +16,7 @@ export class FormsPage implements OnInit {
   ngOnInit() {
     this.title = 'Retailer';
     this.fforce.getTitle = 'Retailer';
-    this.fforce.getLocation();
+    
   }
 
   updateTitle(name) {

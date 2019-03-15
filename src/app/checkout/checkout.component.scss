@@ -18,6 +18,27 @@
         }
     }
 
+    .successStyle {
+        ion-grid {
+            padding: 30px;
+            border: solid #000 1px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            margin-top: 35px;
+            ion-row{
+                ion-label {
+                    text-align: center;
+                    h3 {
+                        font-size: 1.5rem;
+                        margin-top: 40%;
+                        margin-bottom: 10%;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+    }
+
     ion-content {
         form {
             padding: 10px;

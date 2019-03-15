@@ -1,6 +1,7 @@
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavController, IonSelect, LoadingController } from '@ionic/angular';
-import { formatDate } from '@angular/common';
+import { formatDate, LocationStrategy } from '@angular/common';
 import { NgForm } from '@angular/forms';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { DatePicker } from '@ionic-native/date-picker/ngx';
@@ -10,6 +11,8 @@ import { ModalController } from '@ionic/angular';
 import { PopoverComponent } from './../popover/popover.component';
 import { FieldforceService } from '../api/fieldforce.service';
 import { ModalSelectComponent } from '../modal-select/modal-select.component';
+import { Observable, timer, Subject } from "rxjs/";
+import { take, map, takeUntil, count } from 'rxjs/operators';
 
 @Component({
   selector: 'app-form-input',
@@ -53,6 +56,15 @@ export class FormInputComponent implements OnInit {
   numberofAttach: any = 0;
   attachments: any = [];
   loading: any;
+  submitted: boolean;
+  verified: boolean;
+
+  counter: any;
+  count = 5;
+  countdown = 5;
+  showTimer: boolean;
+  subject = new Subject();
+  retailerDetails: any;
 
   constructor(
     public fforce: FieldforceService,
@@ -63,36 +75,94 @@ export class FormInputComponent implements OnInit {
     public modalController: ModalController,
     public loadingCtrl: LoadingController,
 
-  ) { }
+  ) {
+    this.startTimer()
+  }
 
-  ngOnInit() {
-    Promise.resolve(this.fforce.loadLocations()).then(data => {
-      for (var province in data) {
-        this.provinceList.push(province);
-      }
-      this.selectedProvince = this.provinceList[0];
-      data[this.selectedProvince].forEach(city => {
-        this.cityList.push(city);
-      });
-      this.selectedCity = this.cityList[0];
+  setFormData() {
+    this.countdown = this.countdown - 1;
+    if (this.countdown == 0) {
+      this.showTimer = false
+    }
+    // console.log('Done', this.countdown)
+    this.subject.next();
+  }
+
+  startTimer() {
+    this.showTimer = true
+
+    this.counter = timer(0, 1000).pipe(
+      take(this.count),
+      map(() => --this.count),
+      // takeUntil(this.subject),
+    ).subscribe(t => {
+      this.setFormData()
+    });
+  }
+
+  activate(info: NgForm) {
+    let activateDetails = {
+      "uid": info.value.code,
+      "phone_number": "this.retailerDetails.retailer.phone_number"
+    }
+    console.log(activateDetails)
+    Promise.resolve(this.fforce.activate(activateDetails)).then(data => {
+      console.log(data);
+
     }).catch(e => {
       console.log(e);
     });
+  }
+
+  resend() {
+    this.count = 5
+    this.countdown = 5
+    console.log('resend')
+    console.log(this.count)
+    console.log(this.countdown)
+    this.startTimer()
+    let resendDetails = {
+      // "membership": this.retailerDetails.retailer.membership,
+      // "phone_number": this.retailerDetails.retailer.phone_number
+    }
+    console.log(resendDetails)
+    Promise.resolve(this.fforce.resendCode(resendDetails)).then(data => {
+      console.log(data);
+
+    }).catch(e => {
+      console.log(e);
+    });
+  }
+
+  async ngOnInit() {
+    this.submitted = true
+    this.verified = false
+
+
+    await this.getLocs()
+
     this.selectedGender = this.genderList[0];
     this.selectedCrop = this.cropList[0].name;
 
   }
 
+  getLocs() {
+    for (var province in this.fforce.locationList) {
+      this.provinceList.push(province);
+    }
+    this.selectedProvince = this.provinceList[0];
+    this.fforce.locationList[this.selectedProvince].forEach(city => {
+      this.cityList.push(city);
+    });
+    this.selectedCity = this.cityList[0];
+  }
+
   changeProvince(selectedProv) {
     this.cityList = [];
-    Promise.resolve(this.fforce.loadLocations()).then(data => {
-      data[selectedProv].forEach(city => {
-        this.cityList.push(city);
-      });
-      this.selectedCity = this.cityList[0];
-    }).catch(e => {
-      console.log(e);
+    this.fforce.locationList[selectedProv].forEach(city => {
+      this.cityList.push(city);
     });
+    this.selectedCity = this.cityList[0];
   }
 
   async imgModal() {
@@ -154,11 +224,6 @@ export class FormInputComponent implements OnInit {
       console.log('Error occurred while getting date: ', err)
     });
   }
-  validation(value) {
-    if (value.username) {
-
-    }
-  }
 
   next(info: NgForm) {
     console.log(info.value);
@@ -175,7 +240,7 @@ export class FormInputComponent implements OnInit {
         "middle_name": info.value.mname,
         "last_name": info.value.lname,
         "birthdate": info.value.birthdate,
-        "gender": info.value.gender,
+        "gender": info.value.gender == 'Male' ? '1' : '2',
         "business_name": info.value.business_name,
         "address": info.value.houseunit,
         "province": info.value.province.replace(dot, "").replace(space, "_").toLowerCase(),
@@ -183,14 +248,57 @@ export class FormInputComponent implements OnInit {
         "barangay": info.value.barangay,
         "agree_tc": this.form[0].isChecked,
         "agree_pp": this.form[1].isChecked,
-        "lat": this.fforce.location.lat,
-        "lon": this.fforce.location.lon,
-        "photo": this.attachments,
+        "lat": Math.round(this.fforce.location.lat * 100000) / 100000,
+        "lon": Math.round(this.fforce.location.lon * 100000) / 100000,
+        "photo": "https://cushyfy.com/images/logo.png",
         "membership": info.value.membershipid
       }
     }
+    this.retailerDetails = retailerInfo;
+
+    if (retailerInfo.username == "" || retailerInfo.password == "" || retailerInfo.email == "" || retailerInfo.retailer.first_name == "" || retailerInfo.retailer.middle_name == "" || retailerInfo.retailer.last_name == "" || retailerInfo.retailer.birthdate == "" || retailerInfo.retailer.business_name == "" || retailerInfo.retailer.address == "" || retailerInfo.retailer.barangay == "" || retailerInfo.retailer.phone_number == "") {
+      this.fforce.presentAlert('Please fill out all required fields.')
+    } else if (retailerInfo.retailer.photo == "") {
+      this.fforce.presentAlert('Please attached photo')
+    } else if (retailerInfo.password.length < 8) {
+      this.fforce.presentAlert('Password must be 8 characters long.')
+    } else if (retailerInfo.password != info.value.rpassword) {
+      this.fforce.presentAlert('Confirm password did not match.')
+    } else if (!this.form[0].isChecked) {
+      this.fforce.presentAlert('Please tick Terms and Conditions')
+    } else if (!this.form[1].isChecked) {
+      this.fforce.presentAlert('Please tick Privacy Policy')
+    } else if (!this.form[2].isChecked) {
+      this.fforce.presentAlert('Please tick SMS Update')
+    } else {
+      Promise.resolve(this.fforce.createUser(retailerInfo)).then(data => {
+        console.log(data);
+        let response;
+        response = data;
+        if (response.id) {
+          this.submitted = true
+
+          console.log(this.submitted)
+        } else if (response.username) {
+          this.fforce.presentAlert('Failed to create retailer. Username already exist.')
+        } else if (response.retailer) {
+          if (response.retailer.membership) {
+            this.fforce.presentAlert('Failed to create retailer. Membership id already exist.')
+          } else if (response.retailer.phone_number) {
+            this.fforce.presentAlert('Failed to create retailer. Mobile number already exist.')
+          }
+        } else if (response.password) {
+          this.fforce.presentAlert('Password is too common.')
+        } else if (response.email) {
+          this.fforce.presentAlert('Failed to create retailer. Email already registered.')
+        }
+        // alert(JSON.stringify(data));
+      }).catch(e => {
+        console.log(e);
+      });
+    }
     console.log(retailerInfo)
-    alert(JSON.stringify(retailerInfo))
+    // alert(JSON.stringify(retailerInfo))
   }
 
   selectGender(gender) {

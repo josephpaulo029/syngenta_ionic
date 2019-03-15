@@ -101,9 +101,8 @@ export class FieldforceService {
   ) {
     this.dev = "http://54.169.232.8:8004";
     this.link = "https://128.199.228.223:3000"
-    this.ngrok = "http://86d3180a.ngrok.io"
+    this.ngrok = "http://01fd8e27.ngrok.io"
     this.localhosts = "http://localhost:3000"
-    this.preLoadData()
 
   }
 
@@ -234,37 +233,54 @@ export class FieldforceService {
   }
 
   async preLoadData() {
-    await this.loadLocations();
+    await this.getLocation();
+
     await this.getProducts();
     await this.getRetailerList();
   }
 
   async loadLocations() {
-    return new Promise(resolve => {
-      this.httpclient.get(this.ngrok + '/api/locations').subscribe((response) => {
-        let locations: any;
-        locations = response;
-        console.log(locations);
-        resolve(locations);
+    // await this.presentLoading('');
+
+    this.httpclient.get(this.ngrok + '/api/locations').subscribe(response => {
+      this.locationList = response
+      this.loading.dismiss();
+
+      console.log(this.locationList);
+    },
+      err => {
+        this.loading.dismiss();
+        alert(JSON.stringify(err));
       });
-    });
   }
 
-  getMessages() {
-    return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/messages/fieldforces/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe((response) => {
-        // console.log(response);
-        // alert(response);
+  async getMessages() {
+    await this.presentLoading('');
 
-        resolve(response)
-      });
-    });
+    return new Promise(resolve => {
+      this.httpclient.post(this.ngrok + '/api/messages/fieldforces/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+        response => {
+          // console.log(response);
+          // alert(response);
+          this.loading.dismiss();
+
+
+          resolve(response)
+        },
+        err => {
+          this.loading.dismiss();
+          alert(JSON.stringify(err));
+        });
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
-  getProducts() {
+  async getProducts() {
     return new Promise(resolve => {
       this.httpclient.post(this.ngrok + '/api/rewards/products/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
         data => {
+
           this.productList = data;
           console.log(data);
           resolve(data)
@@ -279,10 +295,12 @@ export class FieldforceService {
     })
   }
 
-  getRetailerList() {
+  async getRetailerList() {
+
     return new Promise(resolve => {
       this.httpclient.post(this.ngrok + '/api/users/retailers/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
         data => {
+
           this.retailerList = data;
           console.log(data);
           resolve(data)
@@ -323,6 +341,111 @@ export class FieldforceService {
     })
   }
 
+  async retailerClaim(info) {
+    await this.presentLoading('Submitting...');
+    return new Promise(resolve => {
+      this.httpclient.post(this.ngrok + '/api/rewards/retailers/claim/' + info.membership, { auth_token: localStorage.getItem('token'), details: info }, { headers: this.headers }).subscribe(
+        data => {
+          this.loading.dismiss();
+          console.log(data);
+          resolve(data)
+        },
+        err => {
+          this.loading.dismiss();
+          alert(JSON.stringify(err));
+        }
+      );
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  async growerClaim(info) {
+    await this.presentLoading('Submitting...');
+    return new Promise(resolve => {
+      this.httpclient.post(this.ngrok + '/api/rewards/growers/claim/' + info.membership, { auth_token: localStorage.getItem('token'), details: info }, { headers: this.headers }).subscribe(
+        data => {
+          this.loading.dismiss();
+          console.log(data);
+          resolve(data)
+        },
+        err => {
+          this.loading.dismiss();
+          alert(JSON.stringify(err));
+        }
+      );
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  async createUser(info) {
+    info.retailer.birthdate = "2019-03-06"
+    info.retailer.membership = "8219665819221639"
+    await this.presentLoading('Creating new retailer');
+    return new Promise(resolve => {
+      this.httpclient.post(this.ngrok + '/api/create/users/retailers/', { auth_token: localStorage.getItem('token'), details: info }, { headers: this.headers }).subscribe(
+        data => {
+          this.loading.dismiss();
+          // console.log(data);
+          resolve(data)
+        },
+        err => {
+          this.loading.dismiss();
+          alert(JSON.stringify(err));
+        }
+      );
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  async activate(info) {
+    let data = {
+      "uid": info.uid,
+      "phone_number": "09204009856"
+    }
+    await this.presentLoading('');
+    return new Promise(resolve => {
+      this.httpclient.post(this.ngrok + '/api/users/retailers/activate/' + data.uid + '/' + data.phone_number + '/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+        data => {
+          this.loading.dismiss();
+          // console.log(data);
+          resolve(data)
+        },
+        err => {
+          this.loading.dismiss();
+          alert(JSON.stringify(err));
+        }
+      );
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  async resendCode(info) {
+    let data = {
+      "membership": "8219665819221639",
+      "phone_number": "09204009856"
+    }
+    await this.presentLoading('');
+    return new Promise(resolve => {
+      this.httpclient.post(this.ngrok + '/api/users/retailers/activate/resend/', { auth_token: localStorage.getItem('token'), details: data }, { headers: this.headers }).subscribe(
+        data => {
+          this.loading.dismiss();
+          // console.log(data);
+          resolve(data)
+        },
+        err => {
+          this.loading.dismiss();
+          alert(JSON.stringify(err));
+        }
+      );
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
   ngOnDestroy() {
     // localStorage.removeItem('token');
   }
@@ -345,27 +468,43 @@ export class FieldforceService {
     };
   }
 
-  getLocation() {
-    // this.geolocation.getCurrentPosition().then((resp) => {
-    //   console.log(resp.coords);
-    //   // this.location = resp.coords.latitude + '/' + resp.coords.longitude;
-    //   // resp.coords.latitude
-    //   // resp.coords.longitude
-    // }).catch((error) => {
-    //   console.log('Error getting location', error);
-    // });
+  async getLocation() {
+    await this.presentLoading('');
 
-    this.geolocation.watchPosition().subscribe((data) => {
-      console.log(data.coords);
+    return new Promise(resolve => {
+
+      this.geolocation.getCurrentPosition().then((data) => {
+        console.log(data.coords);
+        this.loadLocations();
+        // this.loading.dismiss();
+
+        this.location = {
+          latlng: data.coords.latitude + '/' + data.coords.longitude,
+          lat: data.coords.latitude,
+          lon: data.coords.longitude
+        }
+
+      }).catch((error) => {
+        this.loading.dismiss();
+
+        console.log('Error getting location', error);
+      });
+
+      // this.geolocation.watchPosition().subscribe((data) => {
+      //   console.log(data.coords);
+      //   resolve(data)
       // this.location = data.coords.latitude + '/' + data.coords.longitude;
-      this.location = {
-        latlng: data.coords.latitude + '/' + data.coords.longitude,
-        lat: data.coords.latitude,
-        lon: data.coords.longitude
-      }
+      // this.location = {
+      //   latlng: data.coords.latitude + '/' + data.coords.longitude,
+      //   lat: data.coords.latitude,
+      //   lon: data.coords.longitude
+      // }
       // data can be a set of coordinates, or an error (if an error occurred).
       // data.coords.latitude
       // data.coords.longitude
-    });
+      // });
+    }).catch(err => {
+      console.log(err)
+    })
   }
 }

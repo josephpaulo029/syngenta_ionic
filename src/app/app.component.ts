@@ -53,6 +53,8 @@ export class AppComponent {
     private router: Router,
 
   ) {
+    this.fforce.preLoadData()
+
     this.initializeApp();
     this.dateNow = Date.now();
     console.log(localStorage.getItem('fieldforce') != null);

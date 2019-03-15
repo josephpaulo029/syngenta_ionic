@@ -91,11 +91,13 @@ export class QrscannerPage implements OnInit {
   async scanCard(cardno: NgForm) {
     this.fforce.getMemberData = undefined;
     this.qrResultString = cardno.value.qrResultString;
-    if(this.fforce.getTitle == 'Retailer'){
-      this.qrResultString = '6508985944667841'
-    }else{
-      this.qrResultString = '5186648475664505'
-    }
+    // if (this.menu == 'purchases') {
+      if (this.fforce.getTitle == 'Retailer') {
+        this.qrResultString = '6508985944667841'
+      } else {
+        this.qrResultString = '5186648475664505'
+      }
+    // }
     let scanParams = {
       memberid: this.qrResultString,
       type: this.fforce.getTitle == 'Retailer' ? 'retailers' : 'growers'

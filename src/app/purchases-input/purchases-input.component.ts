@@ -30,6 +30,7 @@ export class PurchasesInputComponent implements OnInit {
   loading: any = new LoadingController;
   alert: any;
   purchaseInfo: any;
+  invoiceData: any;
   constructor(
     public fforce: FieldforceService,
     private router: Router,
@@ -72,6 +73,9 @@ export class PurchasesInputComponent implements OnInit {
       this.fforce.presentToast('NO PRODUCT ON CHECKOUT')
 
     } else {
+      this.purchaseInfo.invoice = details.value.invoice;
+      this.purchaseInfo.remarks = details.value.remarks == null ? '' : details.value.remarks;
+
       this.purchaseInfo.product.forEach(prod => {
         Promise.resolve(this.getPoints(this.purchaseInfo.retailer.tier, prod)).then(data => {
           prod.tierpoint = data
@@ -98,7 +102,9 @@ export class PurchasesInputComponent implements OnInit {
   }
 
   addItem(details: NgForm) {
+    console.log(details.value)
     this.purchaseInfo = details.value;
+    this.invoiceData = details.value.invoice
     this.purchaseInfo.product = this.cart
     this.purchaseInfo.retailer = this.fforce.getTitle == 'Retailer' ? this.fforce.getMemberData[0] : this.fforce.chosenRetailer
     this.fforce.chosenProduct.quantity = details.value.quantity == '' ? 0 : details.value.quantity
@@ -128,8 +134,10 @@ export class PurchasesInputComponent implements OnInit {
         uom: '',
         membership_status: this.membershipstatus,
         membershipid: this.fforce.getMemberID,
-        dateToday: this.dateToday
+        dateToday: this.dateToday,
+        invoice: this.invoiceData
       });
+
     }
   }
 
@@ -214,6 +222,45 @@ export class PurchasesInputComponent implements OnInit {
       message: msg,
     });
     return await this.loading.present();
+  }
+
+  backtoScan() {
+    this.presentAlertConfirm('Current items will be remove from checkout. Do you want to cancel transaction?')
+  }
+
+  async presentAlertConfirm(msg) {
+    const alert = await this.alertController.create({
+      header: 'Warning',
+      message: msg,
+      buttons: [
+        {
+          text: 'CANCEL',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            // console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'GO BACK',
+          handler: () => {
+            this.router.navigate(['/purchases']);
+            // console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async presentAlert(msg) {
+    this.alert = await this.alertController.create({
+      header: 'Warning',
+      // subHeader: 'Subtitle',
+      message: msg,
+      buttons: ['OK']
+    });
+    this.alert.present();
   }
 
 }

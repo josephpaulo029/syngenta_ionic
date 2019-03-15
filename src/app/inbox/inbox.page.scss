@@ -7,6 +7,10 @@
                 color: #fff;
             }
             ion-buttons {
+                ion-button {
+                    font-size: 2rem; 
+                    color: #fff;
+                }
                 ion-back-button {
                     color: #fff;
                 }
@@ -19,6 +23,7 @@
     }
     
     ion-content {
+        
         .cartStyle {
             margin-bottom: 20px;
             ion-item {
@@ -62,6 +67,7 @@
                 }
             }
         }
+        
         ion-row {
             // text-align: center; 
             margin: 0 auto;
@@ -88,6 +94,32 @@
                 font-size: 1rem;
                 margin-top: -5px;
                 margin-bottom: 5px;
+            }
+        }
+    }
+
+    .viewStyle {
+        ion-grid {
+            padding: 25px 20px 40px 20px;
+            border: solid #000 1px;
+            box-shadow: 0px 2px 5px 0px rgba(136, 136, 136, 0.7);
+            ion-row {
+                .subjectStyle {
+                    font-size: 1.3rem; 
+                    font-weight: 600;
+                }
+                
+                ion-label {
+                    font-size: .9rem;
+                    font-weight: 600;
+                }
+                .bodyStyle {
+                    font-size: .9rem;
+                    font-weight: 400;
+                }
+                ion-col {
+                    border-radius: 5px;
+                }
             }
         }
     }

@@ -1,13 +1,43 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <ion-buttons slot="start" *ngIf="verified != true">
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>{{fforce.getTitle}}</ion-title>
   </ion-toolbar>
+  <ion-toolbar *ngIf="verified == true">
+    <ion-title>{{fforce.getTitle}}</ion-title>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content padding *ngIf="fforce.getTitle == 'Retailer'">
+<ion-content class="submitStyle" padding *ngIf="submitted == true">
+  <ion-grid>
+    <ion-row>
+      <form #code = "ngForm">
+        <ion-input placeholder="" name="code" ngModel></ion-input>
+      </form>
+    </ion-row>
+    <ion-row>
+      <ion-col style="border: none;">
+        <ion-label>&nbsp;&nbsp;&nbsp;SMS Authentication Code&nbsp;&nbsp;&nbsp;</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col style="border: none;">
+        <ion-label *ngIf="showTimer == true">Resend Code? Click Here after {{countdown}} seconds</ion-label>
+        <ion-label (click)="resend()" *ngIf="showTimer == false">Resend Code? Click Here</ion-label>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-button (click)="activate(code)" expand="block" style="--background: #45484d; --background-activated: #45484d; height: 3rem;">ACTIVATE
+    MEMBERSHIP</ion-button>
+</ion-content>
+
+<ion-content class="verifiedStyle" padding *ngIf="verified == true">
+
+</ion-content>
+
+<ion-content padding *ngIf="fforce.getTitle == 'Retailer' && (verified != true && submitted != true)">
   <form #details="ngForm">
     <ion-row>
       <ion-input placeholder="" readonly="true" name="dateToday" [(ngModel)]="dateToday">
@@ -53,14 +83,19 @@
       <ion-label>Email Address</ion-label>
     </ion-row>
 
-    <ion-item (click)="openSelect('gender')" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
-      <ion-input placeholder="" readonly="true" name="gender" [(ngModel)]="selectedGender"> </ion-input>
-      <ion-icon name="arrow-dropdown"></ion-icon>
-    </ion-item>
+    <ion-button (click)="openSelect('gender')"
+      style="--padding-start: 0px; --padding-end: 0px; border: solid #000 1px; margin: 0px; margin-bottom: 5px; --color: #000; --color-activated: #000; --color-focused: #000; --background: #fff; --background-activated: #fff; --background-focused: #fff;"
+      fill="solid" expand="full">
+      <ion-item style="width: 100%;">
+        <span slot="start">{{selectedGender}}</span>
+        <ion-icon slot="end" name="arrow-dropdown"></ion-icon>
+      </ion-item>
+    </ion-button>
     <ion-row>
       <ion-label>Gender</ion-label>
     </ion-row>
-    <ion-item hidden="true" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
+    <ion-item hidden="true"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
       <ion-label>Gender</ion-label>
       <ion-select placeholder="" #genderSelect name="gender" [(ngModel)]="selectedGender">
         <ion-select-option *ngFor="let info of genderList">{{info}}</ion-select-option>
@@ -95,29 +130,39 @@
       <ion-label>House # / Unit #</ion-label>
     </ion-row>
 
-    <ion-item (click)="openSelect('province')" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
-      <ion-input placeholder="" readonly="true" name="province" [(ngModel)]="selectedProvince" (ionChange)="changeProvince($event.detail.value)">
-      </ion-input>
-      <ion-icon name="arrow-dropdown"></ion-icon>
-    </ion-item>
+    <ion-button (click)="openSelect('province')"
+      style="--padding-start: 0px; --padding-end: 0px; border: solid #000 1px; margin: 0px; margin-bottom: 5px; --color: #000; --color-activated: #000; --color-focused: #000; --background: #fff; --background-activated: #fff; --background-focused: #fff;"
+      fill="solid" expand="full">
+      <ion-item style="width: 100%;">
+        <span slot="start">{{selectedProvince}}</span>
+        <ion-icon slot="end" name="arrow-dropdown"></ion-icon>
+      </ion-item>
+    </ion-button>
     <ion-row>
       <ion-label>Province</ion-label>
     </ion-row>
-    <ion-item hidden="true" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
+    <ion-item hidden="true"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
       <ion-label>Province</ion-label>
-      <ion-select placeholder="" #provinceSelect name="province" [(ngModel)]="selectedProvince">
+      <ion-select placeholder="" #provinceSelect name="province" [(ngModel)]="selectedProvince"
+        (ionChange)="changeProvince($event.detail.value)">
         <ion-select-option *ngFor="let info of provinceList">{{info}}</ion-select-option>
       </ion-select>
     </ion-item>
 
-    <ion-item (click)="openSelect('city')" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
-      <ion-input placeholder="" readonly="true" name="city" [(ngModel)]="selectedCity"> </ion-input>
-      <ion-icon name="arrow-dropdown"></ion-icon>
-    </ion-item>
+    <ion-button (click)="openSelect('city')"
+      style="--padding-start: 0px; --padding-end: 0px; border: solid #000 1px; margin: 0px; margin-bottom: 5px; --color: #000; --color-activated: #000; --color-focused: #000; --background: #fff; --background-activated: #fff; --background-focused: #fff;"
+      fill="solid" expand="full">
+      <ion-item style="width: 100%;">
+        <span slot="start">{{selectedCity}}</span>
+        <ion-icon slot="end" name="arrow-dropdown"></ion-icon>
+      </ion-item>
+    </ion-button>
     <ion-row>
       <ion-label>City/Municipality</ion-label>
     </ion-row>
-    <ion-item hidden="true" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
+    <ion-item hidden="true"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
       <ion-label>City/Municipality</ion-label>
       <ion-select placeholder="" #citySelect name="city" [(ngModel)]="selectedCity">
         <ion-select-option *ngFor="let city of cityList">{{city}}</ion-select-option>
@@ -188,17 +233,19 @@
       <ion-checkbox color="dark" checked="entry.isChecked" [(ngModel)]="entry.isChecked">
       </ion-checkbox>
     </ion-col>
-    <ion-col style="border: none; text-align: left;" (click)="entry.isChecked == true ? entry.isChecked = false: entry.isChecked = true">
+    <ion-col style="border: none; text-align: left;"
+      (click)="entry.isChecked == true ? entry.isChecked = false: entry.isChecked = true">
       <ion-label style="font-size: .8rem;">{{entry.val}}</ion-label>
     </ion-col>
   </ion-row>
   <br>
 
-  <ion-button expand="block" style="--background: #45484d; --background-activated: #45484d; height: 3rem;" (click)="next(details)">NEXT
+  <ion-button expand="block" style="--background: #45484d; --background-activated: #45484d; height: 3rem;"
+    (click)="next(details)">NEXT
   </ion-button>
 </ion-content>
 
-<ion-content padding *ngIf="fforce.getTitle == 'Growers'">
+<ion-content padding *ngIf="fforce.getTitle == 'Growers' && (verified != true && submitted != true)">
   <form #details="ngForm">
     <ion-row>
       <ion-input placeholder="" readonly="true" name="dateToday" [(ngModel)]="dateToday">
@@ -237,14 +284,16 @@
       <ion-label>Last Name</ion-label>
     </ion-row>
 
-    <ion-item (click)="openSelect('gender')" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
+    <ion-item (click)="openSelect('gender')"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
       <ion-input placeholder="" readonly="true" name="gender" [(ngModel)]="selectedGender"> </ion-input>
       <ion-icon name="arrow-dropdown"></ion-icon>
     </ion-item>
     <ion-row>
       <ion-label>Gender</ion-label>
     </ion-row>
-    <ion-item hidden="true" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
+    <ion-item hidden="true"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
       <ion-label>Gender</ion-label>
       <ion-select placeholder="" #genderSelect name="gender" [(ngModel)]="selectedGender">
         <ion-select-option *ngFor="let info of genderList">{{info}}</ion-select-option>
@@ -265,42 +314,49 @@
       <ion-label>House # / Unit #</ion-label>
     </ion-row>
 
-    <ion-item (click)="openSelect('province')" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
-      <ion-input placeholder="" readonly="true" name="province" [(ngModel)]="selectedProvince" (ionChange)="changeProvince($event.detail.value)"> </ion-input>
+    <ion-item (click)="openSelect('province')"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
+      <ion-input placeholder="" readonly="true" name="province" [(ngModel)]="selectedProvince"
+        (ionChange)="changeProvince($event.detail.value)"> </ion-input>
       <ion-icon name="arrow-dropdown"></ion-icon>
     </ion-item>
     <ion-row>
       <ion-label>Province</ion-label>
     </ion-row>
-    <ion-item hidden="true" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
+    <ion-item hidden="true"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
       <ion-label>Province</ion-label>
       <ion-select placeholder="" #provinceSelect name="province" [(ngModel)]="selectedProvince">
         <ion-select-option *ngFor="let info of provinceList">{{info}}</ion-select-option>
       </ion-select>
     </ion-item>
 
-    <ion-item (click)="openSelect('city')" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
+    <ion-item (click)="openSelect('city')"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
       <ion-input placeholder="" readonly="true" name="city" [(ngModel)]="selectedCity"> </ion-input>
       <ion-icon name="arrow-dropdown"></ion-icon>
     </ion-item>
     <ion-row>
       <ion-label>City/Municipality</ion-label>
     </ion-row>
-    <ion-item hidden="true" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
+    <ion-item hidden="true"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
       <ion-label>City/Municipality</ion-label>
       <ion-select placeholder="" #citySelect name="city" [(ngModel)]="selectedCity">
         <ion-select-option *ngFor="let info of cityList">{{info}}</ion-select-option>
       </ion-select>
     </ion-item>
 
-    <ion-item (click)="openSelect('crop')" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
+    <ion-item (click)="openSelect('crop')"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 5px;">
       <ion-input placeholder="" readonly="true" name="crop" [(ngModel)]="selectedCrop"> </ion-input>
       <ion-icon name="arrow-dropdown"></ion-icon>
     </ion-item>
     <ion-row>
       <ion-label>Crop</ion-label>
     </ion-row>
-    <ion-item hidden="true" style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
+    <ion-item hidden="true"
+      style="border: solid #000; border-width: 1px; --min-height: 35px; --highlight-background: transparent; margin-bottom: 10px;">
       <ion-label>Crop</ion-label>
       <ion-select placeholder="" #cropSelect name="crop" [(ngModel)]="selectedCrop">
         <ion-select-option *ngFor="let info of cropList">{{info.name}}</ion-select-option>
@@ -357,13 +413,15 @@
       <ion-checkbox color="dark" checked="entry.isChecked" [(ngModel)]="entry.isChecked">
       </ion-checkbox>
     </ion-col>
-    <ion-col style="border: none; text-align: left;" (click)="entry.isChecked == true ? entry.isChecked = false: entry.isChecked = true">
+    <ion-col style="border: none; text-align: left;"
+      (click)="entry.isChecked == true ? entry.isChecked = false: entry.isChecked = true">
       <ion-label style="font-size: .8rem;">{{entry.val}}</ion-label>
     </ion-col>
   </ion-row>
   <br>
 
-  <ion-button expand="block" style="--background: #45484d; --background-activated: #45484d; height: 3rem;" (click)="next(details)">NEXT
+  <ion-button expand="block" style="--background: #45484d; --background-activated: #45484d; height: 3rem;"
+    (click)="next(details)">NEXT
   </ion-button>
 </ion-content>
 

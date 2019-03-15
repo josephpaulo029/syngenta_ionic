@@ -20,6 +20,9 @@ export class CheckoutComponent implements OnInit {
   attachments: any = [];
   cartData: any;
   totalPoints: any;
+  submitted: boolean;
+  transDetails: any;
+
   constructor(
     public fforce: FieldforceService,
     private router: Router,
@@ -31,6 +34,7 @@ export class CheckoutComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    this.submitted = false
     this.membershipstatus = this.fforce.getMembershipStatus(this.fforce.getMemberData[0].tier)
     this.cartData = this.fforce.getCartData;
     await this.getTotal()
@@ -78,6 +82,72 @@ export class CheckoutComponent implements OnInit {
     this.cartData.product.splice(index, 1)
   }
 
+  async endTrans() {
+    let productData = [];
+    let params;
+    console.log(this.cartData)
+    this.cartData.product.forEach(prod => {
+      params = {
+        id: prod.id,
+        quantity: prod.quantity
+      }
+      productData.push(params)
+    });
+    switch (this.fforce.getTitle) {
+      case 'Retailer':
+        this.transDetails = {
+          "membership": this.cartData.membershipid,
+          "products": productData,
+          "receipt_number": this.cartData.invoice,
+          "receipt_photo": "https://cushyfy.com/images/logo.png",
+          "remarks": this.cartData.remarks,
+        }
+        this.presentAlertConfirm('Are you sure you want to END THIS TRANSACTION?')
+        break;
+
+      case 'Grower':
+        this.transDetails = {
+          "membership": this.cartData.membershipid,
+          "products": productData,
+          "receipt_number": this.cartData.invoice,
+          "receipt_photo": "https://cushyfy.com/images/logo.png",
+          "remarks": this.cartData.remarks,
+          "receipt_from": this.cartData.retailer.id,
+        }
+        this.presentAlertConfirm('Are you sure you want to END THIS TRANSACTION?')
+        break;
+
+      default:
+        break;
+    }
+    console.log(this.transDetails)
+
+  }
+
+  saveTrans(info) {
+    if (this.fforce.getTitle == 'Retailer') {
+      Promise.resolve(this.fforce.retailerClaim(info)).then(data => {
+        console.log(data);
+        if (data == null) {
+          this.submitted = true
+        }
+        // alert(JSON.stringify(data));
+      }).catch(e => {
+        console.log(e);
+      });
+    } else {
+      Promise.resolve(this.fforce.growerClaim(info)).then(data => {
+        console.log(data);
+        if (data == null) {
+          this.submitted = true
+        }
+        // alert(JSON.stringify(data));
+      }).catch(e => {
+        console.log(e);
+      });
+    }
+  }
+
   async editItem(info) {
     console.log(info)
     const myModal = await this.modalController.create({
@@ -120,5 +190,30 @@ export class CheckoutComponent implements OnInit {
     this.numberofAttach = this.attachments.length;
 
     // alert(JSON.stringify(this.numberofAttach));
+  }
+
+  async presentAlertConfirm(msg) {
+    const alert = await this.alertController.create({
+      header: 'Warning',
+      message: msg,
+      buttons: [
+        {
+          text: 'CANCEL',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            // console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'OK',
+          handler: () => {
+            this.saveTrans(this.transDetails)
+            // console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }
