@@ -101,7 +101,7 @@ export class FieldforceService {
   ) {
     this.dev = "http://54.169.232.8:8004";
     this.link = "https://128.199.228.223:3000"
-    this.ngrok = "http://01fd8e27.ngrok.io"
+    this.ngrok = "http://97bee420.ngrok.io"
     this.localhosts = "http://localhost:3000"
 
   }
@@ -144,6 +144,16 @@ export class FieldforceService {
   async presentAlert(msg) {
     this.alert = await this.alertController.create({
       header: 'Warning',
+      // subHeader: 'Subtitle',
+      message: msg,
+      buttons: ['OK']
+    });
+    this.alert.present();
+  }
+
+  async presentSuccess(msg) {
+    this.alert = await this.alertController.create({
+      header: 'Success',
       // subHeader: 'Subtitle',
       message: msg,
       buttons: ['OK']
@@ -381,7 +391,7 @@ export class FieldforceService {
 
   async createUser(info) {
     info.retailer.birthdate = "2019-03-06"
-    info.retailer.membership = "8219665819221639"
+    info.retailer.membership = "7925333829567217"
     await this.presentLoading('Creating new retailer');
     return new Promise(resolve => {
       this.httpclient.post(this.ngrok + '/api/create/users/retailers/', { auth_token: localStorage.getItem('token'), details: info }, { headers: this.headers }).subscribe(
@@ -403,7 +413,7 @@ export class FieldforceService {
   async activate(info) {
     let data = {
       "uid": info.uid,
-      "phone_number": "09204009856"
+      "phone_number": info.phone_number
     }
     await this.presentLoading('');
     return new Promise(resolve => {
@@ -425,8 +435,8 @@ export class FieldforceService {
 
   async resendCode(info) {
     let data = {
-      "membership": "8219665819221639",
-      "phone_number": "09204009856"
+      "membership": info.membership,
+      "phone_number": info.phone_number
     }
     await this.presentLoading('');
     return new Promise(resolve => {

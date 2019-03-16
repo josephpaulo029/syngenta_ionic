@@ -93,7 +93,7 @@ export class QrscannerPage implements OnInit {
     this.qrResultString = cardno.value.qrResultString;
     // if (this.menu == 'purchases') {
       if (this.fforce.getTitle == 'Retailer') {
-        this.qrResultString = '6508985944667841'
+        this.qrResultString = '7925333829567217'
       } else {
         this.qrResultString = '5186648475664505'
       }

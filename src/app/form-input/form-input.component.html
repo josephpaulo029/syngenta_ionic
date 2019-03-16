@@ -1,11 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start" *ngIf="verified != true">
+    <ion-buttons slot="start" *ngIf="verified == false">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>{{fforce.getTitle}}</ion-title>
-  </ion-toolbar>
-  <ion-toolbar *ngIf="verified == true">
     <ion-title>{{fforce.getTitle}}</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -13,7 +10,7 @@
 <ion-content class="submitStyle" padding *ngIf="submitted == true">
   <ion-grid>
     <ion-row>
-      <form #code = "ngForm">
+      <form #code="ngForm">
         <ion-input placeholder="" name="code" ngModel></ion-input>
       </form>
     </ion-row>
@@ -25,11 +22,12 @@
     <ion-row>
       <ion-col style="border: none;">
         <ion-label *ngIf="showTimer == true">Resend Code? Click Here after {{countdown}} seconds</ion-label>
-        <ion-label (click)="resend()" *ngIf="showTimer == false">Resend Code? Click Here</ion-label>
+        <ion-label (click)="presentAlertConfirm('Resend your activation code?')" *ngIf="showTimer == false">Resend Code? Click Here</ion-label>
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-button (click)="activate(code)" expand="block" style="--background: #45484d; --background-activated: #45484d; height: 3rem;">ACTIVATE
+  <ion-button (click)="activate(code)" expand="block"
+    style="--background: #45484d; --background-activated: #45484d; height: 3rem;">ACTIVATE
     MEMBERSHIP</ion-button>
 </ion-content>
 

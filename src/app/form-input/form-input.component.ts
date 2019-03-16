@@ -1,6 +1,6 @@
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavController, IonSelect, LoadingController } from '@ionic/angular';
+import { NavController, IonSelect, LoadingController, ToastController, AlertController } from '@ionic/angular';
 import { formatDate, LocationStrategy } from '@angular/common';
 import { NgForm } from '@angular/forms';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
@@ -13,6 +13,7 @@ import { FieldforceService } from '../api/fieldforce.service';
 import { ModalSelectComponent } from '../modal-select/modal-select.component';
 import { Observable, timer, Subject } from "rxjs/";
 import { take, map, takeUntil, count } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-form-input',
@@ -60,8 +61,8 @@ export class FormInputComponent implements OnInit {
   verified: boolean;
 
   counter: any;
-  count = 5;
-  countdown = 5;
+  count = 60;
+  countdown = 60;
   showTimer: boolean;
   subject = new Subject();
   retailerDetails: any;
@@ -72,11 +73,13 @@ export class FormInputComponent implements OnInit {
     private datePicker: DatePicker,
     private mediaCapture: MediaCapture,
     private imagePicker: ImagePicker,
+    private router: Router,
     public modalController: ModalController,
     public loadingCtrl: LoadingController,
+    public toastController: ToastController,
+    public alertController: AlertController,
 
   ) {
-    this.startTimer()
   }
 
   setFormData() {
@@ -101,41 +104,54 @@ export class FormInputComponent implements OnInit {
   }
 
   activate(info: NgForm) {
-    let activateDetails = {
-      "uid": info.value.code,
-      "phone_number": "this.retailerDetails.retailer.phone_number"
-    }
-    console.log(activateDetails)
-    Promise.resolve(this.fforce.activate(activateDetails)).then(data => {
-      console.log(data);
+    console.log(info.value);
+    if (info.value.code == "") {
+      this.fforce.presentAlert('Please enter your SMS verification code.')
+    } else {
 
-    }).catch(e => {
-      console.log(e);
-    });
+      let activateDetails = {
+        "uid": info.value.code,
+        "phone_number": this.retailerDetails.retailer.phone_number
+      }
+      console.log(activateDetails)
+      Promise.resolve(this.fforce.activate(activateDetails)).then(data => {
+        console.log(data);
+        if (data == null) {
+          this.verified = true
+          this.submitted = false
+        } else {
+          this.fforce.presentAlert("Invalid user id/phone number or user doesn't exist.")
+        }
+
+      }).catch(e => {
+        console.log(e);
+      });
+    }
+
   }
 
   resend() {
-    this.count = 5
-    this.countdown = 5
+    this.count = 60
+    this.countdown = 60
     console.log('resend')
     console.log(this.count)
     console.log(this.countdown)
     this.startTimer()
     let resendDetails = {
-      // "membership": this.retailerDetails.retailer.membership,
-      // "phone_number": this.retailerDetails.retailer.phone_number
+      "membership": this.retailerDetails.retailer.membership,
+      "phone_number": this.retailerDetails.retailer.phone_number
     }
     console.log(resendDetails)
     Promise.resolve(this.fforce.resendCode(resendDetails)).then(data => {
       console.log(data);
-
+      this.fforce.presentSuccess("Activation code has been send to your registered mobile number")
     }).catch(e => {
       console.log(e);
     });
   }
 
   async ngOnInit() {
-    this.submitted = true
+    this.submitted = false
     this.verified = false
 
 
@@ -277,6 +293,8 @@ export class FormInputComponent implements OnInit {
         response = data;
         if (response.id) {
           this.submitted = true
+          this.startTimer()
+
 
           console.log(this.submitted)
         } else if (response.username) {
@@ -299,6 +317,31 @@ export class FormInputComponent implements OnInit {
     }
     console.log(retailerInfo)
     // alert(JSON.stringify(retailerInfo))
+  }
+
+  async presentAlertConfirm(msg) {
+    const alert = await this.alertController.create({
+      header: 'Warning',
+      message: msg,
+      buttons: [
+        {
+          text: 'CANCEL',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            // console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'RESEND',
+          handler: () => {
+            // console.log('Confirm Okay');
+            this.resend();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   selectGender(gender) {
