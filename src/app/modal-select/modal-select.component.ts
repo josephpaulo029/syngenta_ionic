@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
-import { NavParams, NavController, ModalController } from '@ionic/angular';
+import { NavParams, NavController, ModalController, MenuController } from '@ionic/angular';
 import { FieldforceService } from '../api/fieldforce.service';
 
 @Component({
@@ -17,9 +17,14 @@ export class ModalSelectComponent implements OnInit {
     private nav: NavController,
     private modalCtrl: ModalController,
     public fforce: FieldforceService,
+    public menuCtrl: MenuController,
 
   ) {
     // componentProps can also be accessed at construction time using NavParams
+  }
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false);
   }
 
   ngOnInit() {
@@ -36,10 +41,10 @@ export class ModalSelectComponent implements OnInit {
     if (selected == '') {
       switch (this.type) {
         case 'products':
-        selectData = this.fforce.chosenProduct
+          selectData = this.fforce.chosenProduct
           break;
         case 'retailers':
-        selectData = this.fforce.chosenRetailer
+          selectData = this.fforce.chosenRetailer
           break;
 
         default:

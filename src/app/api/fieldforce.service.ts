@@ -101,7 +101,7 @@ export class FieldforceService {
   ) {
     this.dev = "http://54.169.232.8:8004";
     this.link = "https://128.199.228.223:3000"
-    this.ngrok = "http://97bee420.ngrok.io"
+    this.ngrok = "http://c86dd563.ngrok.io"
     this.localhosts = "http://localhost:3000"
 
   }
@@ -256,7 +256,7 @@ export class FieldforceService {
       this.locationList = response
       this.loading.dismiss();
 
-      console.log(this.locationList);
+      // console.log(this.locationList);
     },
       err => {
         this.loading.dismiss();
@@ -389,12 +389,33 @@ export class FieldforceService {
     })
   }
 
-  async createUser(info) {
-    info.retailer.birthdate = "2019-03-06"
-    info.retailer.membership = "7925333829567217"
+  async createRetailer(info) {
+    // info.retailer.birthdate = "2019-03-06"
+    // info.retailer.membership = "7814134079305509"
     await this.presentLoading('Creating new retailer');
     return new Promise(resolve => {
       this.httpclient.post(this.ngrok + '/api/create/users/retailers/', { auth_token: localStorage.getItem('token'), details: info }, { headers: this.headers }).subscribe(
+        data => {
+          this.loading.dismiss();
+          // console.log(data);
+          resolve(data)
+        },
+        err => {
+          this.loading.dismiss();
+          alert(JSON.stringify(err));
+        }
+      );
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  async createGrower(info) {
+    // info.retailer.birthdate = "2019-03-06"
+    // info.retailer.membership = "7814134079305509"
+    await this.presentLoading('Creating grower...');
+    return new Promise(resolve => {
+      this.httpclient.post(this.ngrok + '/api/create/users/growers/', { auth_token: localStorage.getItem('token'), details: info }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
           // console.log(data);
@@ -417,7 +438,7 @@ export class FieldforceService {
     }
     await this.presentLoading('');
     return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/users/retailers/activate/' + data.uid + '/' + data.phone_number + '/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.ngrok + '/api/users/' + info.type + '/activate/' + data.uid + '/' + data.phone_number + '/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
           // console.log(data);
@@ -440,7 +461,7 @@ export class FieldforceService {
     }
     await this.presentLoading('');
     return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/users/retailers/activate/resend/', { auth_token: localStorage.getItem('token'), details: data }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.ngrok + '/api/users/' + info.type + '/activate/resend/', { auth_token: localStorage.getItem('token'), details: data }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
           // console.log(data);
@@ -484,7 +505,7 @@ export class FieldforceService {
     return new Promise(resolve => {
 
       this.geolocation.getCurrentPosition().then((data) => {
-        console.log(data.coords);
+        // console.log(data.coords);
         this.loadLocations();
         // this.loading.dismiss();
 

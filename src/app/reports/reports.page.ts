@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FieldforceService } from '../api/fieldforce.service';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-reports',
@@ -10,7 +11,13 @@ export class ReportsPage implements OnInit {
   title: any;
   constructor(
     public fforce: FieldforceService,
+    public menuCtrl: MenuController,
+
   ) { }
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false);
+  }
 
   ngOnInit() {
     this.title = 'Retailer';

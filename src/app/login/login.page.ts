@@ -13,7 +13,7 @@ export class LoginPage implements OnInit {
   constructor(
     public fforce: FieldforceService,
     private router: Router,
-    public menu: MenuController,
+    public menuCtrl: MenuController,
   ) { }
 
   ngOnInit() {
@@ -21,7 +21,7 @@ export class LoginPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.menu.enable(false);
+    this.menuCtrl.enable(false);
   }
 
   validation(validate) {
@@ -38,7 +38,7 @@ export class LoginPage implements OnInit {
       Promise.resolve(this.fforce.login(info.value)).then(data => {
         console.log(data);
         if (data) {
-          this.menu.enable(true);
+          this.menuCtrl.enable(true);
           this.router.navigate(['/dashboard']);
         } else {
           alert('Invalid username or password')

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavController, IonSelect, LoadingController, AlertController } from '@ionic/angular';
+import { NavController, IonSelect, LoadingController, AlertController, MenuController } from '@ionic/angular';
 import { formatDate } from '@angular/common';
 import { NgForm } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
@@ -29,45 +29,20 @@ export class CheckoutComponent implements OnInit {
     public modalController: ModalController,
     public loadingCtrl: LoadingController,
     public alertController: AlertController,
-
+    public menuCtrl: MenuController,
 
   ) { }
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false);
+  }
 
   async ngOnInit() {
     this.submitted = false
     this.membershipstatus = this.fforce.getMembershipStatus(this.fforce.getMemberData[0].tier)
     this.cartData = this.fforce.getCartData;
     await this.getTotal()
-    // this.cartData = [
-    //   {
-    //     id: 1,
-    //     name: 'NK5017 - Bag',
-    //     uom: 'Bag',
-    //     quantity: 2,
-    //     tierpoint: 14
-    //   },
-    //   {
-    //     id: 2,
-    //     name: 'AGRIMEK 250 ML - Carton',
-    //     uom: 'Bag',
-    //     quantity: 1,
-    //     tierpoint: 373
-    //   },
-    //   {
-    //     id: 3,
-    //     name: 'AGRIMEK 250 ML - Carton',
-    //     uom: 'Bag',
-    //     quantity: 1,
-    //     tierpoint: 373
-    //   },
-    //   {
-    //     id: 4,
-    //     name: 'AGRIMEK 250 ML - Carton',
-    //     uom: 'Bag',
-    //     quantity: 1,
-    //     tierpoint: 373
-    //   }
-    // ]
+    
   }
 
   getTotal() {
@@ -125,7 +100,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   saveTrans(info) {
-    if (this.fforce.getTitle == 'Retailer') {
+    if (this.fforce.getTitle == 'Retailers') {
       Promise.resolve(this.fforce.retailerClaim(info)).then(data => {
         console.log(data);
         if (data == null) {

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-account',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccountPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    public menuCtrl: MenuController,
+
+  ) { }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false);
   }
 
 }

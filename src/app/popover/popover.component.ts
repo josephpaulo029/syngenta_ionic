@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
-import { NavParams, NavController, ModalController } from '@ionic/angular';
+import { NavParams, NavController, ModalController, MenuController } from '@ionic/angular';
 import { MediaCapture, MediaFile, CaptureError, CaptureImageOptions } from '@ionic-native/media-capture/ngx';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { FieldforceService } from '../api/fieldforce.service';
@@ -22,9 +22,14 @@ export class PopoverComponent implements OnInit {
     private nav: NavController,
     private modalCtrl: ModalController,
     public fforce: FieldforceService,
+    public menuCtrl: MenuController,
 
   ) {
     // componentProps can also be accessed at construction time using NavParams
+  }
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false);
   }
 
   ngOnInit() {

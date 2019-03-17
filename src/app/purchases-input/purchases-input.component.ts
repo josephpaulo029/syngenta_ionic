@@ -1,7 +1,7 @@
 import { filter } from 'rxjs/operators';
 import { FilterProductsUsertype } from './../filter.pipe';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavController, IonSelect, LoadingController, ToastController, AlertController } from '@ionic/angular';
+import { NavController, IonSelect, LoadingController, ToastController, AlertController, MenuController } from '@ionic/angular';
 import { formatDate } from '@angular/common';
 import { NgForm } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
@@ -38,12 +38,17 @@ export class PurchasesInputComponent implements OnInit {
     public loadingCtrl: LoadingController,
     public toastController: ToastController,
     public alertController: AlertController,
+    public menuCtrl: MenuController,
 
   ) {
     this.fforce.chosenProduct = undefined;
     this.fforce.chosenRetailer = undefined;
     this.itemQty = 1;
 
+  }
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false);
   }
 
   ngOnInit() {
@@ -90,7 +95,7 @@ export class PurchasesInputComponent implements OnInit {
   getPoints(tier, product): Promise<any> {
     console.log(tier)
     console.log(product)
-    let type = this.fforce.getTitle == 'Retailer' ? 'retailer' : 'grower'
+    let type = this.fforce.getTitle == 'Retailers' ? 'retailer' : 'grower'
     return new Promise(resolve => {
       product.points.forEach(element => {
         if (element.user_type == type && element.tier == tier) {
@@ -106,7 +111,7 @@ export class PurchasesInputComponent implements OnInit {
     this.purchaseInfo = details.value;
     this.invoiceData = details.value.invoice
     this.purchaseInfo.product = this.cart
-    this.purchaseInfo.retailer = this.fforce.getTitle == 'Retailer' ? this.fforce.getMemberData[0] : this.fforce.chosenRetailer
+    this.purchaseInfo.retailer = this.fforce.getTitle == 'Retailers' ? this.fforce.getMemberData[0] : this.fforce.chosenRetailer
     this.fforce.chosenProduct.quantity = details.value.quantity == '' ? 0 : details.value.quantity
     if (this.validation(this.purchaseInfo)) {
       if (this.cart.length < 1) {

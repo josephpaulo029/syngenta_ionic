@@ -5,8 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FieldforceService } from '../api/fieldforce.service';
 import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
-import { LoadingController, ToastController, AlertController } from '@ionic/angular';
-
+import { LoadingController, ToastController, AlertController, MenuController } from '@ionic/angular';
 @Component({
   selector: 'app-qrscanner',
   templateUrl: './qrscanner.page.html',
@@ -40,12 +39,15 @@ export class QrscannerPage implements OnInit {
     public loadingCtrl: LoadingController,
     public toastController: ToastController,
     public alertController: AlertController,
+    public menuCtrl: MenuController,
+
   ) { }
 
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false);
+  }
+
   ngOnInit(): void {
-    this.scanner.camerasNotFound.subscribe(() => this.hasDevices = false);
-    this.scanner.scanComplete.subscribe((result: Result) => this.qrResult = result);
-    this.scanner.permissionResponse.subscribe((perm: boolean) => this.hasPermission = perm);
     console.log(this.menu)
     this.fforce.getMemberID = undefined;
     this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
@@ -70,6 +72,14 @@ export class QrscannerPage implements OnInit {
       //     }
       // }
     });
+    this.scanner.camerasNotFound.subscribe(() => this.hasDevices = false);
+    this.scanner.scanComplete.subscribe((result: Result) => this.qrResult = result);
+    this.scanner.permissionResponse.subscribe((perm: boolean) => {
+      this.hasPermission = perm
+      if (perm == null) {
+        this.scanner.scan
+      }
+    });
   }
 
   async presentLoading(msg) {
@@ -92,15 +102,15 @@ export class QrscannerPage implements OnInit {
     this.fforce.getMemberData = undefined;
     this.qrResultString = cardno.value.qrResultString;
     // if (this.menu == 'purchases') {
-      if (this.fforce.getTitle == 'Retailer') {
-        this.qrResultString = '7925333829567217'
-      } else {
-        this.qrResultString = '5186648475664505'
-      }
+    // if (this.fforce.getTitle == 'Retailers') {
+    //   this.qrResultString = '7925333829567217'
+    // } else {
+    //   this.qrResultString = '5186648475664505'
+    // }
     // }
     let scanParams = {
       memberid: this.qrResultString,
-      type: this.fforce.getTitle == 'Retailer' ? 'retailers' : 'growers'
+      type: this.fforce.getTitle == 'Retailers' ? 'retailers' : 'growers'
     }
     if (this.qrResultString != undefined && this.qrResultString != '') {
       switch (this.menu) {
