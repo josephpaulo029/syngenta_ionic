@@ -101,7 +101,7 @@ export class FieldforceService {
   ) {
     this.dev = "http://54.169.232.8:8004";
     this.link = "https://128.199.228.223:3000"
-    this.ngrok = "http://c86dd563.ngrok.io"
+    this.ngrok = "http://ac191fe2.ngrok.io"
     this.localhosts = "http://localhost:3000"
 
   }
@@ -462,6 +462,28 @@ export class FieldforceService {
     await this.presentLoading('');
     return new Promise(resolve => {
       this.httpclient.post(this.ngrok + '/api/users/' + info.type + '/activate/resend/', { auth_token: localStorage.getItem('token'), details: data }, { headers: this.headers }).subscribe(
+        data => {
+          this.loading.dismiss();
+          // console.log(data);
+          resolve(data)
+        },
+        err => {
+          this.loading.dismiss();
+          alert(JSON.stringify(err));
+        }
+      );
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  async forgotpassword(info) {
+    await this.presentLoading('Submitting forgot password request.');
+    let data = {
+      "email": info.email,
+    }
+    return new Promise(resolve => {
+      this.httpclient.post(this.ngrok + '/api/auth/password/reset/', { auth_token: localStorage.getItem('token'), details: data }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
           // console.log(data);

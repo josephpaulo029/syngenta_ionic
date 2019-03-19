@@ -1,12 +1,41 @@
-<!-- <ion-header>
+<ion-header *ngIf="forgot == true">
   <ion-toolbar>
-    <ion-title>login</ion-title>
+    <ion-buttons slot="start" style="font-size: 2rem; color: #fff; margin-left: -5px;" (click)="forgot = false">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-buttons>
+    <ion-title>Forgot Password</ion-title>
   </ion-toolbar>
-</ion-header> -->
+</ion-header>
 
-<ion-content>
+<ion-content padding *ngIf="forgot == true" class="forgotStyle">
+
+  <ion-grid>
+    <ion-row>
+      <form #emailFrm="ngForm">
+        <ion-input placeholder="" name="email" ngModel></ion-input>
+      </form>
+    </ion-row>
+    <ion-row>
+      <ion-col style="border: none;">
+        <ion-label>Enter Email Address</ion-label>
+      </ion-col>
+    </ion-row>
+
+    <ion-row style="margin-top: 20%;">
+      <ion-button shape="round" (click)="forgotPass(emailFrm)">SUBMIT</ion-button>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+
+<ion-content *ngIf="forgot != true">
   <ion-row class="headerImg">
     <!-- <ion-img [src]="logo"></ion-img> -->
+    <ion-col>
+        <ion-label>Tiwala Loyalty</ion-label><br>
+        <ion-label class="subLabel">FIELDFORCE</ion-label>
+    </ion-col>
+    
   </ion-row>
   <ion-grid>
     <ion-row class="spacing"></ion-row>
@@ -28,6 +57,9 @@
         </form>
         <br>
         <ion-row>
+          <ion-label (click)="forgot = true">Forgot Password</ion-label>
+        </ion-row>
+        <ion-row>
           <ion-button shape="round" (click)="login(loginDetails)">LOG IN</ion-button>
         </ion-row>
       </ion-col>
@@ -40,7 +72,7 @@
 <ion-footer>
   <ion-toolbar>
     <ion-title>
-      <img src="assets/img/SYNGENTA WHITE.png">
+      <img src="assets/img/icon_syngenta_footer.png">
     </ion-title>
   </ion-toolbar>
 </ion-footer>

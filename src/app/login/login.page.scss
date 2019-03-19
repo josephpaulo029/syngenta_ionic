@@ -1,4 +1,66 @@
 :host {
+    ion-header {
+        ion-toolbar {
+            --background: #2d644d;
+            ion-title {
+                background: #2d644d;
+                color: #fff;
+            }
+            ion-buttons {
+                ion-button {
+                    font-size: 2rem; 
+                    color: #fff;
+                }
+                ion-back-button {
+                    color: #fff;
+                }
+                ion-menu-button {
+                    color: #fff;
+                }
+
+            }
+        }
+    }
+
+    .forgotStyle {
+        ion-grid {
+            margin-bottom: 100%;
+
+            ion-row {
+                text-align: center;
+                margin: 0 auto;
+                form {
+                    width: 100%;
+                    ion-input {
+                        margin-top: 5%;
+                        font-size: 1rem;
+                        --padding-top: 4%;
+                        --padding-bottom: 4%;
+                        border-radius: 15px;
+                        border: solid #000;
+                        border-width: 1px;
+                        text-align: center;
+                    }
+                }
+                
+                ion-label {
+                    font-size: .8rem;
+                    font-weight: 500;
+                    text-align: center;
+                }
+
+                ion-button {
+                    margin: 0 auto;
+                    width: 50%;
+                    --background: #2e634f;
+                    --background-activated: #2e634f;
+                    --background-focused: #2e634f;
+
+                }
+            }
+        }
+    }
+
     ion-content {
         // background-image: url('../../assets/img/loginBG.jpg');
         --background: #fff;
@@ -25,10 +87,31 @@
             background-size:cover;
             background-image: url('../../assets/img/bg_ricefields_b.png');
             --background: transparent;
+            
+            ion-col {
+                padding-left: 10%;
+                padding-bottom: 10%;
+                padding-top: 10%;
+                ion-label {
+                    color: #fff;
+                    font-size: 2rem;
+                    font-weight: 500;
+                }
+                .subLabel {
+                    color: #fff;
+                    font-size: 1.5rem;
+                    font-weight: 400;
+                }
+            }
         }
 
         .loginItems {
             ion-row {
+                ion-label {
+                    margin: 0 auto;
+                    margin-bottom: 10%;
+                    font-size: .8rem;
+                }
                 ion-button {
                     margin: 0 auto;
                     width: 50%;
@@ -58,7 +141,8 @@
                 background: #2e634f;
                 img {
                     width: 23%;
-                    margin-bottom: 4%;
+                    margin-bottom: 0%;
+                    margin-right: 2%;
                     height: auto;
                 }
             }

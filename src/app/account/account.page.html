@@ -7,14 +7,92 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
+  <ion-grid>
+    <ion-row class="header" style="padding-top: 0px;">
+      <ion-col size="4">
+        <ion-avatar>
+          <img [src]="accountDetails.photo">
+        </ion-avatar>
+      </ion-col>
+      <ion-col style="margin-left: 5%; margin-top: 3%;">
+        <ion-label style="font-size: .9rem; font-weight: 500;">
+          {{accountDetails.first_name.charAt(0).toUpperCase()+accountDetails.first_name.substr(1).toLowerCase()}}
+          {{accountDetails.middle_name.charAt(0).toUpperCase()+accountDetails.middle_name.substr(1).toLowerCase()}}
+          {{accountDetails.last_name.charAt(0).toUpperCase()+accountDetails.last_name.substr(1).toLowerCase()}}
+        </ion-label><br>
+        <ion-label>{{accountDetails.employee_title}}</ion-label><br>
+        <ion-label>Member ID: {{accountDetails.employee_id}}</ion-label><br>
+        <ion-label>Syngenta Philippines</ion-label><br>
+        <!-- <ion-label class="subLabel">{{dateNow | date: "longDate"}}</ion-label><br>
+        <ion-label class="subLabel">{{dateNow | date: "h:mm a"}}</ion-label> -->
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="1.5">
+        <img src="assets/img/ic_area.png">
+      </ion-col>
+      <ion-col>
+        <ion-label>
+          {{accountDetails.region.charAt(0).toUpperCase()+accountDetails.region.substr(1).toLowerCase()}}
+        </ion-label><br>
+        <ion-label class="subLabel">Region</ion-label><br>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="1.5">
+          <img src="assets/img/ic_call.png">
+      </ion-col>
+      <ion-col>
+        <ion-label>
+          {{accountDetails.area.charAt(0).toUpperCase()+accountDetails.area.substr(1).toLowerCase()}}
+        </ion-label><br>
+        <ion-label class="subLabel">Area</ion-label><br>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="1.5">
+          <img src="assets/img/ic_mail.png">
+      </ion-col>
+      <ion-col>
+        <ion-label>
+          {{accountDetails.email}}
+        </ion-label><br>
+        <ion-label class="subLabel">Email Address</ion-label><br>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="1.5">
+          <img src="assets/img/ic_chat_buble.png">
+      </ion-col>
+      <ion-col>
+        <ion-label>
+          {{accountDetails.phone_number}}
+        </ion-label><br>
+        <ion-label class="subLabel">Mobile Number</ion-label><br>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+
+    </ion-row>
+    <ion-row>
+
+    </ion-row>
+    <ion-row>
+
+    </ion-row>
+    <ion-row>
+
+    </ion-row>
+  </ion-grid>
 
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
     <ion-title>
-      <img src="assets/img/SYNGENTA WHITE.png">
+      <img src="assets/img/icon_syngenta_footer.png">
     </ion-title>
   </ion-toolbar>
 </ion-footer>
