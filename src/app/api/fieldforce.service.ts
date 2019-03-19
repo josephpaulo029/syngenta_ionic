@@ -204,7 +204,7 @@ export class FieldforceService {
     }
 
     return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/auth/token/login/', data).subscribe(
+      this.httpclient.post(this.link + '/api/auth/token/login/', info).subscribe(
         response => {
           let res;
           res = response;
@@ -212,7 +212,7 @@ export class FieldforceService {
             this.token = res.auth_token;
             localStorage.setItem('token', res.auth_token);
 
-            this.httpclient.post(this.ngrok + '/api/users/fieldforces/me/' + this.token, { headers: this.headers }).subscribe(
+            this.httpclient.post(this.link + '/api/users/fieldforces/me/' + this.token, { headers: this.headers }).subscribe(
               res => {
                 console.log(res)
                 this.fieldforceData = res
@@ -252,7 +252,7 @@ export class FieldforceService {
   async loadLocations() {
     // await this.presentLoading('');
 
-    this.httpclient.get(this.ngrok + '/api/locations').subscribe(response => {
+    this.httpclient.get(this.link + '/api/locations').subscribe(response => {
       this.locationList = response
       this.loading.dismiss();
 
@@ -268,7 +268,7 @@ export class FieldforceService {
     await this.presentLoading('');
 
     return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/messages/fieldforces/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.link + '/api/messages/fieldforces/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
         response => {
           // console.log(response);
           // alert(response);
@@ -288,7 +288,7 @@ export class FieldforceService {
 
   async getProducts() {
     return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/rewards/products/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.link + '/api/rewards/products/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
         data => {
 
           this.productList = data;
@@ -308,7 +308,7 @@ export class FieldforceService {
   async getRetailerList() {
 
     return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/users/retailers/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.link + '/api/users/retailers/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
         data => {
 
           this.retailerList = data;
@@ -328,7 +328,7 @@ export class FieldforceService {
   async memberidVerification(info) {
     await this.presentLoading('Validating membership id');
     return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/users/' + info.type + '/' + info.memberid, { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.link + '/api/users/' + info.type + '/' + info.memberid, { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
           // console.log(data);
@@ -354,7 +354,7 @@ export class FieldforceService {
   async retailerClaim(info) {
     await this.presentLoading('Submitting...');
     return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/rewards/retailers/claim/' + info.membership, { auth_token: localStorage.getItem('token'), details: info }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.link + '/api/rewards/retailers/claim/' + info.membership, { auth_token: localStorage.getItem('token'), details: info }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
           console.log(data);
@@ -373,7 +373,7 @@ export class FieldforceService {
   async growerClaim(info) {
     await this.presentLoading('Submitting...');
     return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/rewards/growers/claim/' + info.membership, { auth_token: localStorage.getItem('token'), details: info }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.link + '/api/rewards/growers/claim/' + info.membership, { auth_token: localStorage.getItem('token'), details: info }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
           console.log(data);
@@ -394,7 +394,7 @@ export class FieldforceService {
     // info.retailer.membership = "7814134079305509"
     await this.presentLoading('Creating new retailer');
     return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/create/users/retailers/', { auth_token: localStorage.getItem('token'), details: info }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.link + '/api/create/users/retailers/', { auth_token: localStorage.getItem('token'), details: info }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
           // console.log(data);
@@ -415,7 +415,7 @@ export class FieldforceService {
     // info.retailer.membership = "7814134079305509"
     await this.presentLoading('Creating grower...');
     return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/create/users/growers/', { auth_token: localStorage.getItem('token'), details: info }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.link + '/api/create/users/growers/', { auth_token: localStorage.getItem('token'), details: info }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
           // console.log(data);
@@ -438,7 +438,7 @@ export class FieldforceService {
     }
     await this.presentLoading('');
     return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/users/' + info.type + '/activate/' + data.uid + '/' + data.phone_number + '/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.link + '/api/users/' + info.type + '/activate/' + data.uid + '/' + data.phone_number + '/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
           // console.log(data);
@@ -461,7 +461,7 @@ export class FieldforceService {
     }
     await this.presentLoading('');
     return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/users/' + info.type + '/activate/resend/', { auth_token: localStorage.getItem('token'), details: data }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.link + '/api/users/' + info.type + '/activate/resend/', { auth_token: localStorage.getItem('token'), details: data }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
           // console.log(data);
@@ -483,7 +483,7 @@ export class FieldforceService {
       "email": info.email,
     }
     return new Promise(resolve => {
-      this.httpclient.post(this.ngrok + '/api/auth/password/reset/', { auth_token: localStorage.getItem('token'), details: data }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.link + '/api/auth/password/reset/', { auth_token: localStorage.getItem('token'), details: data }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
           // console.log(data);
@@ -491,6 +491,27 @@ export class FieldforceService {
         },
         err => {
           this.loading.dismiss();
+          alert(JSON.stringify(err));
+        }
+      );
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  async checkNumber(info) {
+    // await this.presentLoading('Submitting forgot password request.');
+    console.log(info)
+    return new Promise(resolve => {
+      this.httpclient.post(this.link + '/api/checkmobile/' + info, { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+        data => {
+          // this.loading.dismiss();
+          console.log(data);
+          let res;
+          res = data;
+          resolve(res)
+        },
+        err => {
           alert(JSON.stringify(err));
         }
       );
