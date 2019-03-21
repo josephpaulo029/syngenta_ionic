@@ -11,8 +11,10 @@ import { MenuController } from '@ionic/angular';
 })
 export class FormsPage implements OnInit {
   title: any;
-  reregister: boolean;
-  activate: boolean;
+  mainView: boolean;
+  reregisterView: boolean;
+  activateView: boolean;
+  scanningView: boolean;
   memberDetails: any;
 
   constructor(
@@ -26,8 +28,8 @@ export class FormsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.reregister = false
-    this.activate = false
+    this.hideAll();
+    this.mainView = true;
     this.title = 'Retailer';
     this.fforce.getTitle = 'Retailer';
 
@@ -41,25 +43,33 @@ export class FormsPage implements OnInit {
 
   next(info: NgForm) {
     console.log(info.value)
+    info.value.mobileno = "09204009856"
     if (info.value.mobileno == "") {
       this.fforce.presentAlert('Kindly enter your enrolled mobile number')
     } else {
       Promise.resolve(this.fforce.checkNumber(info.value.mobileno)).then(data => {
         console.log(data);
-        let res;
-        res = data;
-        if (res.length == 0) {
+        this.memberDetails = data;
+
+        if (this.memberDetails.length == 0) {
           this.fforce.presentAlert("Mobile number is invalid or doesn't exist")
         } else {
-          this.activate = true
-          this.reregister = false
-          this.memberDetails = res;
+          this.hideAll();
+          this.activateView = true
         }
 
       }).catch(e => {
         console.log(e);
       });
     }
+  }
+
+  hideAll() {
+    this.mainView = false
+    this.reregisterView = false
+    this.activateView = false
+    this.scanningView = false
+
   }
 
 }

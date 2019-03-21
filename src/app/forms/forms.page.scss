@@ -33,7 +33,7 @@
 
     .memberinfoStyle {
         ion-grid {
-            margin-bottom: 115%;
+            margin-bottom: 75%;
 
             ion-row {
                 text-align: center;
@@ -62,7 +62,7 @@
 
     .lostcardStyle {
         ion-grid {
-            margin-bottom: 115%;
+            margin-bottom: 112%;
 
             ion-row {
                 text-align: center;
@@ -72,8 +72,8 @@
                     ion-input {
                         margin-top: 5%;
                         font-size: 1rem;
-                        --padding-top: 4%;
-                        --padding-bottom: 4%;
+                        // --padding-top: 4%;
+                        // --padding-bottom: 4%;
                         border: solid #000;
                         border-width: 1px;
                         text-align: center;

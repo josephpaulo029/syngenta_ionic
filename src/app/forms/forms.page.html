@@ -1,44 +1,65 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start" *ngIf="reregister != true && activate != true">
+    <ion-buttons slot="start" *ngIf="mainView == true">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-buttons *ngIf="reregister == true" slot="start" style="font-size: 2rem; color: #fff; margin-left: -5px;"
-      (click)="reregister = false">
+    <ion-buttons *ngIf="reregisterView == true" slot="start" style="font-size: 2rem; color: #fff; margin-left: -5px;"
+      (click)="hideAll() ;mainView = true">
       <ion-icon name="arrow-back"></ion-icon>
     </ion-buttons>
-    <ion-buttons *ngIf="activate == true" slot="start" style="font-size: 2rem; color: #fff; margin-left: -5px;"
-      (click)="activate = false ; reregister = true">
+    <ion-buttons *ngIf="activateView == true" slot="start" style="font-size: 2rem; color: #fff; margin-left: -5px;"
+      (click)="hideAll() ; reregisterView = true">
       <ion-icon name="arrow-back"></ion-icon>
     </ion-buttons>
-    <ion-title *ngIf="activate != true">{{title || 'Retailer'}}</ion-title>
-    <ion-title *ngIf="activate == true">Re-Register - {{memberDetails.type == 'retailers' ? 'Retailer' : 'Grower'}}
+    <ion-buttons *ngIf="scanningView == true" slot="start" style="font-size: 2rem; color: #fff; margin-left: -5px;"
+      (click)="hideAll() ; activateView = true">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-buttons>
+    <ion-title *ngIf="activateView != true">{{title || 'Retailer'}}</ion-title>
+    <ion-title *ngIf="activateView == true">Re-Register -
+      {{memberDetails[0].type == 'retailers' ? 'Retailer' : 'Grower'}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding *ngIf="activate == true" class="memberinfoStyle">
+<ion-content *ngIf="scanningView == true" class="scanningStyle">
 
-  <!-- <ion-grid>
-    <ion-row>
-      <form #dataInfo="ngForm">
-        <ion-input placeholder="Ex. 091234567890" name="mobileno" ngModel></ion-input>
-      </form>
-    </ion-row>
-    <ion-row>
-      <ion-col style="border: none;">
-        <ion-label>Input Enrolled Mobile Number</ion-label>
-      </ion-col>
-    </ion-row>
-
-  </ion-grid>
-  <ion-button (click)="next(dataInfo)" expand="block"
-    style="--background: #45484d; --background-activated: #45484d; height: 3rem;"> NEXT
-  </ion-button> -->
+  <app-qrscanner [menu]="'forms'"></app-qrscanner>
 
 </ion-content>
 
-<ion-content padding *ngIf="reregister == true" class="lostcardStyle">
+<ion-content padding *ngIf="activateView == true" class="memberinfoStyle">
+
+  <ion-grid>
+    <ion-row>
+      <ion-input placeholder="" readonly="true" style="background: #2e634f; color: #fff; border: solid #000 1px;">
+      </ion-input>
+    </ion-row>
+    <ion-row style="margin-bottom: 5%;">
+      <ion-label>Membership ID</ion-label>
+    </ion-row>
+    <ion-row>
+      <ion-input placeholder="" readonly="true" style="border: solid #000 1px;">
+      </ion-input>
+    </ion-row>
+    <ion-row style="margin-bottom: 5%;">
+      <ion-label>Full Name</ion-label>
+    </ion-row>
+    <ion-row>
+      <ion-input placeholder="" readonly="true" style="border: solid #000 1px;">
+      </ion-input>
+    </ion-row>
+    <ion-row style="margin-bottom: 5%;">
+      <ion-label>Mobile Number</ion-label>
+    </ion-row>
+  </ion-grid>
+  <ion-button (click)="hideAll() ;scanningView = true;" expand="block"
+    style="--background: #45484d; --background-activated: #45484d; height: 3rem;"> ACTIVATE MEMBERSHIP ID
+  </ion-button>
+
+</ion-content>
+
+<ion-content padding *ngIf="reregisterView == true" class="lostcardStyle">
 
   <ion-grid>
     <ion-row>
@@ -59,7 +80,7 @@
 
 </ion-content>
 
-<ion-content *ngIf="reregister != true && activate != true">
+<ion-content *ngIf="mainView == true">
   <ion-row class="navTabs">
     <ion-col style="background: #45484d;" (click)="updateTitle('Retailers')">
       <ion-label>Retailer</ion-label>
@@ -79,7 +100,8 @@
         style="--background: #2e634f; --background-activated: #2e634f; --background-focused: #2e634f; width: 100%; height: 5rem; margin: 0 auto; margin-bottom: 20px;">
         CHANGE MOBILE
         NUMBER</ion-button>
-      <ion-button (click)="reregister = true" expand="block" size="large"
+      <!-- <ion-button (click)="hideAll();reregisterView = true" expand="block" size="large" -->
+      <ion-button expand="block" size="large"
         style="--background: #e8883c; --background-activated: #e8883c; --background-focused: #e8883c; width: 100%; height: 5rem; margin: 0 auto;">
         LOST MEMBERSHIP CARD</ion-button>
     </ion-col>

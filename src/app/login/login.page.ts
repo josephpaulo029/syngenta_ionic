@@ -32,7 +32,7 @@ export class LoginPage implements OnInit {
     if (validate.username != "" && validate.password != "") {
       return true
     } else {
-      return true
+      return false
     }
   }
 
@@ -45,7 +45,7 @@ export class LoginPage implements OnInit {
           this.menuCtrl.enable(true);
           this.router.navigate(['/dashboard']);
         } else {
-          alert('Invalid username or password')
+          this.fforce.presentAlert('Invalid username or password')
         }
         // alert(JSON.stringify(data));
       }).catch(e => {
