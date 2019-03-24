@@ -342,21 +342,29 @@ export class FormInputComponent implements OnInit {
     this.countdown = this.countdown - 1;
     if (this.countdown == 0) {
       this.showTimer = false
+      this.counter.unsubscribe();
+
     }
-    // console.log('Done', this.countdown)
-    this.subject.next();
   }
 
   startTimer() {
     this.showTimer = true
-
-    this.counter = timer(0, 1000).pipe(
-      take(this.count),
-      map(() => --this.count),
-      // takeUntil(this.subject),
-    ).subscribe(t => {
-      this.setFormData()
-    });
+    if (this.counter != undefined) {
+      this.counter.unsubscribe();
+      this.counter = timer(0, 1000).pipe(
+        take(this.count),
+        map(() => --this.count),
+      ).subscribe(t => {
+        this.setFormData()
+      });
+    } else {
+      this.counter = timer(0, 1000).pipe(
+        take(this.count),
+        map(() => --this.count),
+      ).subscribe(t => {
+        this.setFormData()
+      });
+    }
   }
 
   activate(info: NgForm) {

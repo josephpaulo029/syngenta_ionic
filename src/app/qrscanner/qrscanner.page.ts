@@ -18,6 +18,7 @@ export class QrscannerPage implements OnInit {
   @ViewChild('scanner')
   scanner: ZXingScannerComponent;
   @Input() menu: any;
+  @Output() result = new EventEmitter<any>();
   hasDevices: boolean;
   hasPermission: boolean;
   qrResultString: string;
@@ -103,7 +104,7 @@ export class QrscannerPage implements OnInit {
     this.qrResultString = cardno.value.qrResultString;
     // if (this.menu == 'purchases') {
     // if (this.fforce.getTitle == 'Retailers') {
-    //   this.qrResultString = '7925333829567217'
+    // this.qrResultString = '6368942349450011'
     // } else {
     //   this.qrResultString = '5186648475664505'
     // }
@@ -114,6 +115,12 @@ export class QrscannerPage implements OnInit {
     }
     if (this.qrResultString != undefined && this.qrResultString != '') {
       switch (this.menu) {
+        case 'formsChangemobile':
+          this.result.emit(this.qrResultString)
+          break;
+        case 'formsReregister':
+          this.result.emit(this.qrResultString)
+          break;
         case 'forms':
           this.fforce.getMemberID = this.qrResultString;
           this.router.navigate(['/forminput']);
@@ -139,7 +146,11 @@ export class QrscannerPage implements OnInit {
       }
 
     } else {
-      this.presentAlert('Please scan or enter your card number.')
+      if (this.menu == 'formsReregister') {
+        this.presentAlert('Please scan your new Member ID')
+      } else {
+        this.presentAlert('Please scan or enter your card number.')
+      }
     }
 
 

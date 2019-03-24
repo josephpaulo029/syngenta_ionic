@@ -86,6 +86,7 @@ export class FieldforceService {
   alert: any;
   productList: any;
   retailerList: any;
+  growerList: any;
   ngrok: any;
   localhosts: any;
   fieldforceData: any;
@@ -100,8 +101,8 @@ export class FieldforceService {
     public alertController: AlertController,
   ) {
     this.dev = "http://54.169.232.8:8004";
-    // this.link = "http://f16035a6.ngrok.io"
-    this.link = "https://128.199.228.223:3000"
+    this.link = "http://92260a3e.ngrok.io"
+    // this.link = "https://128.199.228.223:3000"
     this.ngrok = "http://ac191fe2.ngrok.io"
     this.localhosts = "http://localhost:3000"
 
@@ -218,7 +219,6 @@ export class FieldforceService {
                 console.log(res)
                 this.fieldforceData = res
                 localStorage.setItem('fieldforce', JSON.stringify(this.fieldforceData));
-                this.preLoadData()
                 this.loading.dismiss();
 
                 resolve(true);
@@ -244,19 +244,12 @@ export class FieldforceService {
     })
   }
 
-  async preLoadData() {
-    await this.getLocation();
-
-    await this.getProducts();
-    await this.getRetailerList();
-  }
-
   async loadLocations() {
     // await this.presentLoading('');
 
     this.httpclient.get(this.link + '/api/ios/locations').subscribe(response => {
       this.locationList = response
-      this.loading.dismiss();
+      // this.loading.dismiss();
 
       // console.log(this.locationList);
     },
@@ -289,13 +282,78 @@ export class FieldforceService {
   }
 
   async getProducts() {
-    return new Promise(resolve => {
-      this.httpclient.post(this.link + '/api/ios/rewards/products/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
-        data => {
+    await this.presentLoading('');
 
-          this.productList = data;
+    this.httpclient.post(this.link + '/api/ios/rewards/products/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+      data => {
+        this.productList = data;
+        console.log(data);
+
+        this.httpclient.post(this.link + '/api/ios/users/retailers/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+          data => {
+
+            this.retailerList = data;
+            console.log(data);
+
+            this.httpclient.post(this.link + '/api/ios/users/growers/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+              data => {
+                this.growerList = data;
+                console.log(data);
+                this.loading.dismiss();
+
+              },
+              err => {
+                this.loading.dismiss();
+                alert(JSON.stringify(err));
+              }
+            );
+          },
+          err => {
+            this.loading.dismiss();
+            alert(JSON.stringify(err));
+          }
+        );
+      },
+      err => {
+        this.loading.dismiss();
+        alert(JSON.stringify(err));
+      }
+    );
+
+  }
+
+  async checkMembership(info) {
+    // await this.presentLoading('');
+    return new Promise(resolve => {
+      this.httpclient.post(this.link + '/api/ios/users/retailers/' + info, { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+        data => {
+          let res;
+          res = data[0];
           console.log(data);
-          resolve(data)
+          if (res == undefined) {
+            this.httpclient.post(this.link + '/api/ios/users/growers/' + info, { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+              data => {
+                res = data[0];
+                console.log(data);
+                // this.loading.dismiss();
+                if (res != undefined) {
+                  res.type = 'growers'
+                  resolve(res)
+                } else {
+                  resolve(false)
+                }
+              },
+              err => {
+                // this.loading.dismiss();
+                alert(JSON.stringify(err));
+              }
+            );
+          } else {
+            this.loading.dismiss();
+            res.type = 'retailers'
+            resolve(res)
+          }
+
         },
         err => {
           this.loading.dismiss();
@@ -308,20 +366,18 @@ export class FieldforceService {
   }
 
   async getRetailerList() {
-
+    // await this.presentLoading('');
     return new Promise(resolve => {
-      this.httpclient.post(this.link + '/api/ios/users/retailers/', { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
-        data => {
 
-          this.retailerList = data;
-          console.log(data);
-          resolve(data)
-        },
-        err => {
-          this.loading.dismiss();
-          alert(JSON.stringify(err));
-        }
-      );
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  async getGrowerList() {
+    // await this.presentLoading('');
+    return new Promise(resolve => {
+
     }).catch(err => {
       console.log(err)
     })
@@ -441,7 +497,7 @@ export class FieldforceService {
     }
     await this.presentLoading('');
     return new Promise(resolve => {
-      this.httpclient.post(this.link + '/api/ios/users/activate/' + info.type, { auth_token: localStorage.getItem('token'), details: data }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.link + '/api/ios/activate/' + info.type, { auth_token: localStorage.getItem('token'), details: data }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
           // console.log(data);
@@ -530,16 +586,44 @@ export class FieldforceService {
   async verifyLostcard(info) {
     let data;
     data = {
-      "phone_number": "09204009856",
-      "membership": "7158875344769298"
+      "phone_number": info.phone_number,
+      "membership": info.membership
     }
     await this.presentLoading('');
     console.log(info)
     return new Promise(resolve => {
-      this.httpclient.post(this.link + '/users/verify/' + info.type + '/lostcard/' + info, { auth_token: localStorage.getItem('token'), details: data }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.link + '/api/ios/users/verify/' + info.type + '/lostcard/', { auth_token: localStorage.getItem('token'), details: data }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
-          console.log(data);
+          // console.log(data);
+          let res;
+          res = data;
+          resolve(res)
+        },
+        err => {
+          this.loading.dismiss();
+          alert(JSON.stringify(err));
+        }
+      );
+    }).catch(err => {
+      this.loading.dismiss();
+      console.log(err)
+    })
+  }
+
+  async verifyLostphone(info) {
+    let data;
+    data = {
+      "phone_number": info.phone_number,
+      "membership": info.membership,
+    }
+    await this.presentLoading('');
+    console.log(info)
+    return new Promise(resolve => {
+      this.httpclient.post(this.link + '/api/ios/users/verify/' + info.type + '/lostphone/', { auth_token: localStorage.getItem('token'), details: data }, { headers: this.headers }).subscribe(
+        data => {
+          this.loading.dismiss();
+          // console.log(data);
           let res;
           res = data;
           resolve(res)
@@ -559,10 +643,10 @@ export class FieldforceService {
     await this.presentLoading('');
     console.log(info)
     return new Promise(resolve => {
-      this.httpclient.post(this.link + '/reports/' + info.type + '/' + info.id, { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+      this.httpclient.post(this.link + '/api/ios/reports/' + info.type + '/' + info.id, { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
         data => {
           this.loading.dismiss();
-          console.log(data);
+          // console.log(data);
           let res;
           res = data;
           resolve(res)
@@ -601,14 +685,12 @@ export class FieldforceService {
   }
 
   async getLocation() {
-    await this.presentLoading('');
 
     return new Promise(resolve => {
 
       this.geolocation.getCurrentPosition().then((data) => {
         // console.log(data.coords);
         this.loadLocations();
-        // this.loading.dismiss();
 
         this.location = {
           latlng: data.coords.latitude + '/' + data.coords.longitude,

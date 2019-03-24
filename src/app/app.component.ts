@@ -53,15 +53,14 @@ export class AppComponent {
     private router: Router,
 
   ) {
-    // this.fforce.preLoadData()
 
     this.initializeApp();
     this.dateNow = Date.now();
     // console.log(localStorage.getItem('fieldforce') != null);
     // console.log(localStorage.getItem('token') != null);
     if(localStorage.getItem('token') != null){
-      this.router.navigate(['/forms']);
-      // this.router.navigate(['/dashboard']);
+      // this.router.navigate(['/forms']);
+      this.router.navigate(['/dashboard']);
       this.userDetails = JSON.parse(localStorage.getItem('fieldforce'))
       // console.log(this.userDetails)
     }

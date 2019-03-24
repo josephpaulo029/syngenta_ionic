@@ -16,6 +16,8 @@ export class DashboardPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.fforce.getLocation()
+    this.fforce.getProducts()
   }
 
   ionViewWillEnter() {
