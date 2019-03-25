@@ -101,8 +101,8 @@ export class FieldforceService {
     public alertController: AlertController,
   ) {
     this.dev = "http://54.169.232.8:8004";
-    this.link = "http://92260a3e.ngrok.io"
-    // this.link = "https://128.199.228.223:3000"
+    // this.link = "http://240684b9.ngrok.io"
+    this.link = "https://128.199.228.223:3000"
     this.ngrok = "http://ac191fe2.ngrok.io"
     this.localhosts = "http://localhost:3000"
 
@@ -656,6 +656,25 @@ export class FieldforceService {
           alert(JSON.stringify(err));
         }
       );
+    }).catch(err => {
+      this.loading.dismiss();
+      console.log(err)
+    })
+  }
+
+  // create api in node
+  async getmyRetailers(info) {
+    await this.presentLoading('');
+    console.log(info)
+    return new Promise(resolve => {
+      this.httpclient.post(this.link + '/api/ios/reports/' + info.type + '/' + info.id, { auth_token: localStorage.getItem('token') }, { headers: this.headers }).subscribe(
+        data => {
+          console.log(data);
+        },
+        err => {
+          this.loading.dismiss();
+          alert(JSON.stringify(err));
+        });
     }).catch(err => {
       this.loading.dismiss();
       console.log(err)
