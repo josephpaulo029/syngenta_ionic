@@ -9,6 +9,8 @@ import { MenuController } from '@ionic/angular';
 })
 export class ReportsPage implements OnInit {
   title: any;
+  // searchText: any;
+  // reports: any;
   constructor(
     public fforce: FieldforceService,
     public menuCtrl: MenuController,
@@ -22,6 +24,17 @@ export class ReportsPage implements OnInit {
   ngOnInit() {
     this.title = 'Retailer';
     this.fforce.getTitle = 'Retailer';
+    // let reportsDetails = {
+    //   type: "retailers",
+    //   id: "94",
+    //   param: "fieldforce",
+    // }
+    // Promise.resolve(this.fforce.getReports(reportsDetails)).then(data => {
+    //   console.log(data);
+
+    // }).catch(e => {
+    //   console.log(e);
+    // });
   }
 
   updateTitle(name) {
